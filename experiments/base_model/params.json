@@ -1,0 +1,11 @@
+{
+    "learning_rate": 0.001,
+    "num_epochs": 10,
+    "batch_size": 128,
+
+    "hidden_size": 200,
+    "dropout": 0.3,
+
+    "gpu": 0,
+    "save_summary_steps": 100
+}

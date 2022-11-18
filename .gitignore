@@ -1,0 +1,6 @@
+data/**
+**__pycache__/
+**ipynb_checkpoints/
+!.gitkeep
+experiments/base_model/**
+!params.json
