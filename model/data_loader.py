@@ -1,5 +1,6 @@
 from email import utils
 from itertools import chain
+from math import ceil
 import os
 import random
 
@@ -137,7 +138,8 @@ class DataLoader(object):
             random.shuffle(order)
 
         # One pass over data
-        for i in range((data['size'] + 1) // params.batch_size):
+        num_batch = ceil((data['size']) / params.batch_size)
+        for i in range(num_batch):
             
             # Fetch sentences and labels:
             batch_indices_sentences = [data['sentences'][idx] for idx in order[i*params.batch_size : (i+1)*params.batch_size]]

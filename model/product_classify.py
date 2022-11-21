@@ -1,5 +1,6 @@
 import logging
 import os
+from math import ceil
 
 import torch
 import numpy as np
@@ -20,23 +21,16 @@ logger = logging.getLogger()
 metrics = encoder.metrics
 
 class ProductClassify(nn.Module):
+
     def __init__(self, params):
         """ Initialize paramters and components for training process
 
         Args:
             params: (Params) store parameter for model
         """
+        
         # Initialize the parameters
         super(ProductClassify, self).__init__()
-        # self.num_epochs = params.num_epochs
-        # self.batch_size = params.batch_size
-        # self.hidden_size = params.hidden_size
-        # self.dropout = params.dropout
-        # self.learning_rate = params.learning_rate
-        # self.use_gpu = params.gpu
-        # self.vocab_size = params.vocab_size
-        # self.labels_size = params.labels_size
-
         self.params = params
 
         # Define the encoder
@@ -85,7 +79,8 @@ class ProductClassify(nn.Module):
             """Training process"""
             
             # Compute number of batches in one epoch (one full pass over the training set)
-            num_steps = (self.train_size + 1) // self.params.batch_size
+            num_steps = ceil(self.train_size / self.params.batch_size)
+            # num_steps = (self.train_size + 1) // self.params.batch_size
             train_data_iterator = data_loader.data_iterator(
                 data=train_data,
                 params=self.params,
@@ -199,7 +194,7 @@ class ProductClassify(nn.Module):
         # Load data, prepare for training process
         test_size = data['size']
 
-        num_steps = (test_size + 1) // self.params.batch_size
+        num_steps = ceil(test_size / self.params.batch_size)
         test_data_iterator = DataLoader.data_iterator(
             data=data,
             params=self.params,
@@ -213,23 +208,29 @@ class ProductClassify(nn.Module):
         # Summary for current eval loop
         summ = []
 
-        # Init list containing labels prediction
+        # Init list containing labels and probability prediction
         pred_labels = []
+        pred_probs = []
         # Compute metrics over the dataset
-        for _ in range(num_steps):
+        for _ in trange(num_steps, desc="Inferring"):
             # Fetch the next evaluation batch
             sentences_batch, labels_batch = next(test_data_iterator)
             # Compute model output
             output_batch = self.encoder(sentences_batch)
             loss = self.loss_function(output_batch, labels_batch)
+            probs = torch.softmax(output_batch, dim=1)
 
             # Extract data from torch Variable, move to cpu, convert to numpy arrays
             output_batch = output_batch.data.cpu().numpy()
             labels_batch = labels_batch.data.cpu().numpy()
+            probs = probs.data.cpu().numpy()
 
             if infer:
                 pred_batch = list(np.argmax(output_batch, axis=1))
                 pred_labels.extend(pred_batch)
+                
+                prob_batch = list(np.max(probs, axis=1))
+                pred_probs.extend(prob_batch) 
 
             # Compute all metrics on this batch
             summary_batch = {
@@ -240,7 +241,7 @@ class ProductClassify(nn.Module):
             summ.append(summary_batch)
 
         if infer:
-            return pred_labels
+            return pred_labels, pred_probs
         
         # Compute mean of all metrics in summary
         metrics_mean = {
@@ -250,81 +251,3 @@ class ProductClassify(nn.Module):
         metrics_string = " ; ".join("{}: {:05.3f}".format(k, v) for k, v in metrics_mean.items())
 
         return metrics_mean, metrics_string
-
-    # def predict_batch(self, sentences):
-    #     """ Predict the sentences by batches
-
-    #     Args:
-    #         sentences: (nd.array) array contains the text sentences 
-    #     """
-    #     self.encoder.eval()
-    #     label2prob = []
-    #     with torch.no_grad():
-    #         batches = data_loader.get_batch(
-    #             data=sentences,
-    #             batch_size=self.batch_size,
-    #             shuffle=False
-    #         )
-            
-    #         for batch in tqdm(batches, total=len(batches), desc='+ Evaluate'.ljust(12, ' ')):
-    #             sents_tensor = build_features.preprocess_batch(batch, self.vocab, self.vocab_size)
-    #             if self.use_gpu:
-    #                 sents_tensor = sents_tensor.cuda()
-    #             output = self.encoder(sents_tensor)
-    #             output = torch.softmax(output, dim=1)
-
-    #             probs, preds = torch.max(output, 1)
-    #             for prob, pred in zip(probs, preds):
-    #                 lbl = self.index2label[pred.item()]
-    #                 label2prob.append(dict([(lbl, prob.item())]))   
-    #         return label2prob
-
-
-    # def save_model(self, model_path, data_save=None):
-    #     # to save the pre-trained model for testing
-    #     if data_save is not None:
-    #         state = data_save
-    #     else:
-    #         state = {
-    #             'state_dict': self.encoder.state_dict(),
-    #             'vocab': self.vocab,
-    #             'label2index': self.label2index,
-    #             'hidden_size': self.hidden_size,
-    #         }
-    #     with open(model_path, 'wb') as f:
-    #         torch.save(state, f, _use_new_zipfile_serialization=False)
-
-    # def load_model(self, model_file):
-    #     # load the pre-trained model
-    #     with open(model_file, 'rb') as f:
-    #         # If we want to use GPU and CUDA is correctly installed
-    #         if self.use_gpu and torch.cuda.is_available():
-    #             state = torch.load(f)
-    #         else:
-    #             # Load all tensors onto the CPU
-    #             state = torch.load(f, map_location='cpu')
-    #     logger.debug(f'model state = {str(state)}')
-    #     if not state:
-    #         return None
-    #     self.vocab = state['vocab']
-    #     self.label2index = state['label2index']
-    #     self.hidden_size = state['hidden_size']
-    #     self.vocab_size = len(self.vocab)
-    #     self.label_size = len(self.label2index)
-    #     self.answers = state['answers']
-    #     self.origins = state['origins']
-
-    #     self.index2label = {v: k for k, v in self.label2index.items()}
-
-    #     self.encoder = encoder.Encoder(label_size=self.label_size, hidden_size=self.hidden_size,
-    #                            max_words=self.vocab_size, dropout=self.dropout)
-    #     self.encoder.load_state_dict(state['state_dict'])
-
-    #     if self.use_gpu:
-    #         self.encoder.cuda()
-    #     return True
-
-    # def count_parameters(self):
-    #     return sum(p.numel() for p in self.parameters() if p.requires_grad)
-
-

@@ -18,9 +18,12 @@ class Params():
     ```
     """
 
-    def __init__(self, json_path) -> None:
-        with open(json_path) as fi:
-            params = json.load(fi)
+    def __init__(self, json_path=None, params=None) -> None:
+        if params is None:
+            with open(json_path) as fi:
+                params = json.load(fi)
+                self.__dict__.update(params)
+        else:
             self.__dict__.update(params)
 
     def save(self, json_path):
@@ -127,7 +130,7 @@ def save_checkpoint(state, is_best, checkpoint):
         shutil.copyfile(file_path, os.path.join(checkpoint, 'best.pth.tar'))
 
 
-def load_checkpoint(checkpoint, model: ProductClassify):
+def load_checkpoint(checkpoint, model: ProductClassify, optimizer=None):
     """Loads model parameters (state_dict) from file_path. If optimize is provided, loads state_dict of
     optimizer assuming it is present in checkpoint.
     
@@ -139,7 +142,10 @@ def load_checkpoint(checkpoint, model: ProductClassify):
     if not os.path.exists(checkpoint):
         raise("File doesn't exist {}".format(checkpoint))
     checkpoint = torch.load(checkpoint)
-
+    model.encoder.load_state_dict(checkpoint['state_dict'])
+    if optimizer:
+        model.optimizer.load_state_dict(checkpoint['optim_dict'])
+    return checkpoint
 
 
 

@@ -3,7 +3,6 @@
 import argparse
 import logging
 import os
-from this import d
 
 import torch
 

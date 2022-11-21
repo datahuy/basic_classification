@@ -4,3 +4,4 @@ data/**
 !.gitkeep
 experiments/base_model/**
 !params.json
+api_log/**
