@@ -3,6 +3,7 @@
 import argparse
 import logging
 import os
+from this import d
 
 import torch
 
@@ -19,12 +20,6 @@ parser.add_argument('--restore_file', default=None,
                     help="Optional, name of the file in --model_dir containing weights to reload before \
                     training")  # 'best' or 'train'
 
-
-def train_and_validate(model: ProductClassify, data_loader, model_dir, data_dir):
-    """
-    Train the model and evaluate every epoch
-    """
-    model.run_train(data_loader, data_dir, model_dir)
 
 if __name__ == '__main__':
 
@@ -54,7 +49,11 @@ if __name__ == '__main__':
     data_loader = DataLoader(args.data_dir, params)
 
     # Define the model and optimizer
-    model = ProductClassify(params)
+    model = ProductClassify(params=params)
     
     # Train the model
-    train_and_validate(model, data_loader, args.model_dir, args.data_dir)
+    model.run_train(
+        data_loader=data_loader,
+        data_dir=args.data_dir,
+        model_dir=args.model_dir
+    )

@@ -5,9 +5,7 @@ class Test:
 def test():
     print(obj.n)
 
-
+# NUM = 20
 if __name__ == "__main__":
 
-    obj = Test()
-
-    test()
+    NUM = 100

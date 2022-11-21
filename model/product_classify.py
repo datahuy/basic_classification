@@ -83,6 +83,7 @@ class ProductClassify(nn.Module):
             logging.info("Epoch {}/{}".format(epoch + 1, self.params.num_epochs))
 
             """Training process"""
+            
             # Compute number of batches in one epoch (one full pass over the training set)
             num_steps = (self.train_size + 1) // self.params.batch_size
             train_data_iterator = data_loader.data_iterator(
@@ -118,9 +119,11 @@ class ProductClassify(nn.Module):
 
                 # Evaluate summaries only once in a while
                 if i % self.params.save_summary_steps == 0:
+                    
                     # Extract data from torch Variable, move to cpu, convert to numpy arrays
                     output_batch = output_batch.data.cpu().numpy()
                     labels_batch = labels_batch.data.cpu().numpy()
+                    
                     # Compute metrics on this batch
                     summary_batch = {
                         metric: metrics[metric](output_batch, labels_batch)
@@ -144,13 +147,13 @@ class ProductClassify(nn.Module):
 
 
             """Validate process"""
+            
             val_data = data['val']
             self.val_size = val_data['size']
 
-            val_metrics = self.evaluate(
-                data=val_data,
-                model_dir=model_dir
-            )
+            val_metrics, val_metrics_string = self.evaluate(data=val_data)
+            logging.info("- Eval metrics : " + val_metrics_string)
+
 
             val_acc = val_metrics['accuracy']
             is_best = val_acc >= best_val_acc
@@ -184,16 +187,14 @@ class ProductClassify(nn.Module):
             utils.save_dict_to_json(val_metrics, last_json_path)
 
 
-    def evaluate(self, data, model_dir):
+    def evaluate(self, data, infer=False):
         """
         Evaluate for model
 
         Args:
-            data_loader: (DataLoader) store, process the aspects of data
-            data_dir: (str) directory containing the data
-            model_dir: (string) directory containing config, weights and log
+            data: (dict) contains data which has keys 'sentences', 'labels' and 'size'.
+            infer: (bool) whether return labels prediction
         """
-        utils.set_logger(os.path.join(model_dir, 'train.log'))
 
         # Load data, prepare for training process
         test_size = data['size']
@@ -205,17 +206,19 @@ class ProductClassify(nn.Module):
             shuffle=False
         )
 
+
         # Set model to evaluation mode
         self.encoder.eval()
 
         # Summary for current eval loop
         summ = []
 
+        # Init list containing labels prediction
+        pred_labels = []
         # Compute metrics over the dataset
         for _ in range(num_steps):
             # Fetch the next evaluation batch
             sentences_batch, labels_batch = next(test_data_iterator)
-
             # Compute model output
             output_batch = self.encoder(sentences_batch)
             loss = self.loss_function(output_batch, labels_batch)
@@ -223,6 +226,10 @@ class ProductClassify(nn.Module):
             # Extract data from torch Variable, move to cpu, convert to numpy arrays
             output_batch = output_batch.data.cpu().numpy()
             labels_batch = labels_batch.data.cpu().numpy()
+
+            if infer:
+                pred_batch = list(np.argmax(output_batch, axis=1))
+                pred_labels.extend(pred_batch)
 
             # Compute all metrics on this batch
             summary_batch = {
@@ -232,14 +239,17 @@ class ProductClassify(nn.Module):
             summary_batch['loss'] = loss.item()
             summ.append(summary_batch)
 
+        if infer:
+            return pred_labels
+        
         # Compute mean of all metrics in summary
         metrics_mean = {
             metric: np.mean([x[metric] for x in summ])
             for metric in summ[0]
         }
         metrics_string = " ; ".join("{}: {:05.3f}".format(k, v) for k, v in metrics_mean.items())
-        logging.info("- Eval metrics : " + metrics_string)
-        return metrics_mean
+
+        return metrics_mean, metrics_string
 
     # def predict_batch(self, sentences):
     #     """ Predict the sentences by batches
