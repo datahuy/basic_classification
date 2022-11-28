@@ -68,13 +68,16 @@ class ClassfierModel():
 
         return text_embeddings
 
-    def predict(self, input: List): # Needs batching
+    def predict(self, input: List, batch_size):
         text_embeddings = self.preprocess(input)
+        probs = []
+        preds = []
         with torch.no_grad():
-            outputs = self.encoder(text_embeddings)
+            for i in range(0, len(input), batch_size):
+                outputs = self.encoder(text_embeddings[i:i+batch_size])
+                outputs = torch.softmax(outputs, dim=-1)
+                cur_probs, cur_preds = torch.max(outputs, dim=-1)
+                preds.extend([self.index2label[p] for p in cur_preds.tolist()])
+                probs.extend(cur_probs.tolist())
 
-        outputs = torch.softmax(outputs, dim=-1)
-        probs, preds = torch.max(outputs, dim=-1)
-        preds = [self.index2label[p] for p in preds.tolist()]
-
-        return preds, probs.tolist()
+        return preds, probs
