@@ -28,7 +28,7 @@
 # ENTRYPOINT ["sh", "/app/run.sh"]
 
 
-FROM continuumio/miniconda3:4.12.0
+FROM python:3.9-slim
 
 
 WORKDIR /app

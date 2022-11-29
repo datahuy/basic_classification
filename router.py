@@ -18,7 +18,7 @@ logging.basicConfig(
 
 
 # Define classification models
-industry_classifier = IndustryClassifier('output_model/best.pt', batch_size=128)
+industry_classifier = IndustryClassifier('model/industry_cls_best_1129.pt', batch_size=128)
 
 class Body(BaseModel):
     product_name: Union[str, list]
@@ -34,7 +34,6 @@ def industry_cls(body_params: Body):
     try:
         preds, probs = industry_classifier.predict(product_name, threshold)
         result = [{"product_name": n, "industry": p, "score": str(s)} for n, p, s in zip(product_name, preds, probs)]
-        logging.info(result)
         return {
             "data": result,
             "status": "success",
