@@ -29,6 +29,7 @@ app = FastAPI()
 
 @app.get("/")
 def root():
+    print(12134123)
     return {"message": "Hello World"}
 
 @app.post("/industry_cls/")
