@@ -1,0 +1,15 @@
+model_config:
+  hidden_size: 200
+  dropout: 0.3
+
+training_config:
+  output_dir: 'output_model'
+  learning_rate: 0.001
+  num_epochs: 10
+  train_batch_size: 128
+  eval_batch_size: 128
+  gpu: -1
+  logging_steps: 100
+  eval_steps: 1000
+  save_steps: 3000
+  save_best: True

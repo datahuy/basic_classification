@@ -1,6 +1,6 @@
-from model.model import ClassfierModel
-from model.trainer import ClassifierTrainer
-from data.classifier_dataset import ClassifierDataset
+from main.models.model import ClassfierModel
+from main.models.trainer import ClassifierTrainer
+from main.data.classifier_dataset import ClassifierDataset
 from torch.utils.data import DataLoader
 import argparse
 import os
@@ -26,8 +26,8 @@ def load_config(config_path):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a product classifier')
-    parser.add_argument('--data_dir', default='../classify_data')
-    parser.add_argument('--config_path', default='../classify_data/config.yaml')
+    parser.add_argument('--data_dir', default='data')
+    parser.add_argument('--config_path', default='data/config.yaml')
     args = parser.parse_args()
 
     return args
