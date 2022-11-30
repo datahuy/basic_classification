@@ -29,7 +29,12 @@ class Body(BaseModel):
 
 app = FastAPI()
 
-@app.post("/industry_cls/")
+@app.get("/pd-industry-classification/")
+def root():
+    return {"message": "Product Classification"}
+
+
+@app.post("/pd-industry-classification/industry_cls/")
 def industry_cls(body_params: Body):
     product_name, threshold_KP, threshold_FMCG = body_params.product_name, body_params.threshold_KP, body_params.threshold_FMCG
     if type(product_name) == str:
@@ -37,23 +42,20 @@ def industry_cls(body_params: Body):
     try:
         # get prediction for 4 original KP classes
         preds_KP, probs_KP = industry_classifier.predict(product_name, threshold_KP)
-        result_KP = [{"product_name": n, "industry": p, "score": str(s)} for n, p, s in zip(product_name, preds_KP, probs_KP)]
+        result_KP = [{"product_name": n, "industry": [p], "score": [s]} for n, p, s in zip(product_name, preds_KP, probs_KP)]
 
         # get prediction for FMCG
         preds_FMCG, probs_FMCG = FMCG_classifier.predict(product_name, threshold_FMCG)
-        result_FMCG = [{"product_name": n, "industry": p, "score": str(s)} for n, p, s in zip(product_name, preds_FMCG, probs_FMCG)]
+        result_FMCG = [{"product_name": n, "industry": p, "score": s} for n, p, s in zip(product_name, preds_FMCG, probs_FMCG)]
         
-        # for each item, if result_FMCG is fmcg, add fmcg to result industry
         for i in range(len(result_KP)):
-            if result_FMCG[i]['industry'] == 'fmcg':
-                result_KP[i]['industry'] = [result_KP[i]['industry'], result_FMCG[i]['industry']]
-                result_KP[i]['score'] = [result_KP[i]['score'], result_FMCG[i]['score']]        
-        # for each item, if result_KP industry include unknown and fmcg, drop unknown
-        for i in range(len(result_KP)):
-            if 'unknown' in result_KP[i]['industry'] and 'fmcg' in result_KP[i]['industry']:
-                result_KP[i]['score'].remove(result_KP[i]['score'][result_KP[i]['industry'].index('unknown')])
-                result_KP[i]['industry'].remove('unknown')
-
+            if 'fmcg' in result_FMCG[i]['industry']:
+                if 'unknown' in result_KP[i]['industry']: # Replace unknown with fmcg
+                    result_KP[i]['industry'] = [result_FMCG[i]['industry']]
+                    result_KP[i]['score'] = [result_FMCG[i]['score']]   
+                else:
+                    result_KP[i]['industry'].append(result_FMCG[i]['industry'])
+                    result_KP[i]['score'].append(result_FMCG[i]['score'])
         return {
             "data": result_KP,
             "status": "success",
