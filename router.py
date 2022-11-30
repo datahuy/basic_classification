@@ -27,12 +27,12 @@ class Body(BaseModel):
 
 app = FastAPI()
 
-@app.get("/")
+@app.get("/pd-industry-classification/")
 def root():
     print(12134123)
     return {"message": "Hello World"}
 
-@app.post("/industry_cls/")
+@app.post("/pd-industry-classification/industry_cls/")
 def industry_cls(body_params: Body):
     print(body_params)
     product_name, threshold = body_params.product_name, body_params.threshold
