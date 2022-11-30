@@ -1,9 +1,9 @@
-fastapi
-uvicorn[standard]
 scikit-learn==1.0.2
 --find-links https://download.pytorch.org/whl/torch_stable.html
 torch==1.13.0+cpu
 tqdm==4.63.0
 visen==0.0.1
-gunicorn==20.1.0
 pyvi==0.1.1
+uvicorn[standard]==0.20.0
+gunicorn==20.1.0
+fastapi[all]==0.88.0

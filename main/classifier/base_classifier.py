@@ -3,6 +3,7 @@ from main.utils.model_utils import load_model
 class BaseClassifier():
     def __init__(self, model_path, batch_size):
         self.model = load_model(model_path)
+        self.model.encoder.eval()
         self.batch_size = batch_size
 
     def preprocess(self, input):
