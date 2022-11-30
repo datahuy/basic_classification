@@ -24,20 +24,38 @@ FMCG_classifier = FMCGClassifier('model/model_fmcg_binary_best_converted.pt', ba
 
 class Body(BaseModel):
     product_name: Union[str, list]
-    threshold: int = 0.5
+    threshold_KP: int = 0.5
+    threshold_FMCG: int = 0.5
 
 app = FastAPI()
 
 @app.post("/industry_cls/")
 def industry_cls(body_params: Body):
-    product_name, threshold = body_params.product_name, body_params.threshold
+    product_name, threshold_KP, threshold_FMCG = body_params.product_name, body_params.threshold_KP, body_params.threshold_FMCG
     if type(product_name) == str:
         product_name = [product_name]
     try:
-        preds, probs = industry_classifier.predict(product_name, threshold)
-        result = [{"product_name": n, "industry": p, "score": str(s)} for n, p, s in zip(product_name, preds, probs)]
+        # get prediction for 4 original KP classes
+        preds_KP, probs_KP = industry_classifier.predict(product_name, threshold_KP)
+        result_KP = [{"product_name": n, "industry": p, "score": str(s)} for n, p, s in zip(product_name, preds_KP, probs_KP)]
+
+        # get prediction for FMCG
+        preds_FMCG, probs_FMCG = FMCG_classifier.predict(product_name, threshold_FMCG)
+        result_FMCG = [{"product_name": n, "industry": p, "score": str(s)} for n, p, s in zip(product_name, preds_FMCG, probs_FMCG)]
+        
+        # for each item, if result_FMCG is fmcg, add fmcg to result industry
+        for i in range(len(result_KP)):
+            if result_FMCG[i]['industry'] == 'fmcg':
+                result_KP[i]['industry'] = [result_KP[i]['industry'], result_FMCG[i]['industry']]
+                result_KP[i]['score'] = [result_KP[i]['score'], result_FMCG[i]['score']]        
+        # for each item, if result_KP industry include unknown and fmcg, drop unknown
+        for i in range(len(result_KP)):
+            if 'unknown' in result_KP[i]['industry'] and 'fmcg' in result_KP[i]['industry']:
+                result_KP[i]['score'].remove(result_KP[i]['score'][result_KP[i]['industry'].index('unknown')])
+                result_KP[i]['industry'].remove('unknown')
+
         return {
-            "data": result,
+            "data": result_KP,
             "status": "success",
             "status_code": 200,
             "message": "Classify industry level done"
@@ -49,27 +67,4 @@ def industry_cls(body_params: Body):
             "status": "error",
             "status_code": 500,
             "message": f"Exception in industry_cls: {e}"
-        }
-
-@app.post("/FMCG_cls/")
-def FMCG_cls(body_params: Body):
-    product_name, threshold = body_params.product_name, body_params.threshold
-    if type(product_name) == str:
-        product_name = [product_name]
-    try:
-        preds, probs = FMCG_classifier.predict(product_name, threshold)
-        result = [{"product_name": n, "industry": p, "score": str(s)} for n, p, s in zip(product_name, preds, probs)]
-        return {
-            "data": result,
-            "status": "success",
-            "status_code": 200,
-            "message": "Classify FMCG done"
-        }
-    except Exception as e:
-        logging.error(e)
-        return {
-            "data": product_name,
-            "status": "error",
-            "status_code": 500,
-            "message": f"Exception in FMCG_cls: {e}"
         }
