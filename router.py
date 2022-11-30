@@ -7,6 +7,7 @@ from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel
 from main.classifier.industry_classifier import IndustryClassifier
+# import uvicorn
 
 logging.basicConfig(
         level=logging.INFO,
@@ -53,3 +54,6 @@ def industry_cls(body_params: Body):
     #         "status_code": 500,
     #         "message": f"Exception in industry_cls: {e}"
     #     }
+
+# if __name__ == "__main__":
+#     uvicorn.run(app, host="0.0.0.0", port=9201)
