@@ -1,7 +1,8 @@
 from main.utils.model_utils import load_model
-
+import logging
 class BaseClassifier():
-    def __init__(self, model_path, batch_size):
+    def __init__(self, model_path, batch_size, name):
+        logging.info(f"Finish loading {name}!")
         self.model = load_model(model_path)
         self.model.encoder.eval()
         self.batch_size = batch_size

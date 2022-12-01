@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from main.classifier.industry_classifier import IndustryClassifier
 from main.classifier.FMCG_classifier import FMCGClassifier
+import time
 
 logging.basicConfig(
         level=logging.INFO,
@@ -38,6 +39,7 @@ def industry_cls(body_params: Body):
     if type(product_name) == str:
         product_name = [product_name]
     try:
+        start = time.time()
         # get prediction for 4 original KP classes
         preds_KP, probs_KP = industry_classifier.predict(product_name, threshold_KP)
         result_KP = [{"product_name": n, "industry": [p], "score": [s]} for n, p, s in zip(product_name, preds_KP, probs_KP)]
@@ -54,12 +56,19 @@ def industry_cls(body_params: Body):
                 else:
                     result_KP[i]['industry'].append(result_FMCG[i]['industry'])
                     result_KP[i]['score'].append(result_FMCG[i]['score'])
-        return {
+        
+        ret = {
             "data": result_KP,
             "status": "success",
             "status_code": 200,
             "message": "Classify industry level done"
         }
+
+        product_name_for_logging = ", ".join(product_name[:10])
+        product_name_for_logging += ", ..." if len(product_name) > 10 else ""
+        logging.info(f"Prediction for [{product_name_for_logging}] took {(time.time()-start):.4f} seconds.")
+        
+        return ret
     except Exception as e:
         logging.error(e)
         return {
