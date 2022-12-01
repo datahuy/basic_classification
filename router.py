@@ -5,6 +5,7 @@ from typing import Union
 from fastapi import FastAPI
 from pydantic import BaseModel
 from main.classifier.industry_classifier import IndustryClassifier
+from main.classifier.FMCG_classifier import FMCGClassifier
 
 logging.basicConfig(
         level=logging.INFO,
