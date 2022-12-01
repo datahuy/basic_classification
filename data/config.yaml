@@ -3,7 +3,7 @@ model_config:
   dropout: 0.3
 
 training_config:
-  output_dir: 'output_model'
+  checkpoint_dir: 'experiments/base_model'
   learning_rate: 0.001
   num_epochs: 10
   train_batch_size: 128

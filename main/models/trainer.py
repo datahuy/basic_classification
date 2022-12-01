@@ -1,11 +1,16 @@
-import json
+import logging
+import os
+import shutil
+
 import torch
-from tqdm import tqdm, trange
 import torch.nn as nn
 import torch.optim as optim
 import torch.nn.functional as F
+from tqdm import tqdm
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-import os
+
+import utils
+
 
 class ClassifierTrainer():
     def __init__(self, 
@@ -31,16 +36,20 @@ class ClassifierTrainer():
         )
         self.loss_function = nn.CrossEntropyLoss()
 
-        min_loss = float('inf')
-        current_steps = 0
-        total_steps = len(self.train_dataloader.dataset)
+        utils.set_logger(log_path=os.path.join(self.checkpoint_dir, "train.log"))
+        logging.info("Started training {} epoch(s)".format(self.num_epochs))
+
+        best_val_acc = 0.0
         self.encoder.train()
         for epoch in range(self.num_epochs):
-            running_loss = 0
-            i = 0
-            with tqdm(self.train_dataloader, unit="batch") as tepoch:
+            logging.info("\nEpoch {}/{}".format(epoch + 1, self.num_epochs))
+            current_batch = 0
+            train_loss = 0
+            train_acc = 0
+            with tqdm(self.train_dataloader, unit="batch", colour="green") as tepoch:
                 for text_embeddings, labels in tepoch:
-                    tepoch.set_description(f"Epoch {epoch}")
+
+                    tepoch.set_description("+ Training".ljust(10))
                     self.encoder.zero_grad()
 
                     outputs = self.encoder(text_embeddings.to(self.device))
@@ -53,26 +62,60 @@ class ClassifierTrainer():
                     # Performs updates using calculated gradients
                     self.optimizer.step()
 
-                    running_loss += loss.item()*self.train_batch_size
-                    if i and i % self.logging_steps == 0:
-                        train_summary = {'train_loss': running_loss/(i*self.train_batch_size), 'steps': f"{current_steps}/{total_steps}"}
-                        print('\n', train_summary)
-                        running_loss = 0
-                    i += 1
-                    current_steps += 1
+                    current_batch += 1
 
-                    if current_steps and current_steps % self.eval_steps == 0:
-                        eval_summary, _ = self.evaluate()
-                        eval_summary['steps'] = f"{current_steps}/{total_steps}"
-                        print(eval_summary)
-                        if eval_summary['eval_loss'] < min_loss:
-                            min_loss = eval_summary['eval_loss']
-                            print('Best model so far, eval loss = ', min_loss)
-                            self.save_model(os.path.join(self.output_dir, f"best.pt"))
+                    train_loss += loss.item()
+                    loss_avg = train_loss / current_batch
                     
-                    if current_steps and current_steps % self.save_steps == 0:
-                        self.save_model(os.path.join(self.output_dir, f"checkpoint_step_{current_steps}.pt"))
+                    probs = torch.softmax(outputs, dim=-1)
+                    preds = torch.argmax(probs, dim=-1)
+                    train_acc += accuracy_score(labels, preds)
+                    train_acc_avg = train_acc / current_batch
 
+                    train_summary = {
+                        "loss": loss_avg,
+                        "accuracy": train_acc_avg
+                    }
+                    
+                    tepoch.set_postfix(
+                        loss=train_summary["loss"],
+                        acc=train_summary["accuracy"]
+                    )
+
+                    """Evaluate, save by steps"""
+
+                    # if current_steps and current_steps % self.eval_steps == 0:
+                    #     eval_summary, _ = self.evaluate()
+                    #     eval_summary['steps'] = f"{current_steps}/{total_steps}"
+                    #     print(eval_summary)
+                    #     if eval_summary['eval_loss'] < min_loss:
+                    #         min_loss = eval_summary['eval_loss']
+                    #         print('Best model so far, eval loss = ', min_loss)
+                    #         self.save_model(os.path.join(self.output_dir, f"best.pt"))
+                    
+                    # if current_steps and current_steps % self.save_steps == 0:
+                    #     self.save_model(os.path.join(self.output_dir, f"checkpoint_step_{current_steps}.pt"))
+            
+            str_summ = "- Train metrics:"
+            for k, v in train_summary.items():
+                str_summ += "{}: {:05.3f}".format(k, v).rjust(20)
+            logging.info(str_summ)
+            eval_summary, _ = self.evaluate()
+            str_summ = "- Eval metrics :"
+            for k, v in eval_summary.items():
+                str_summ += "{}: {:05.3f}".format(k, v).rjust(20)
+            logging.info(str_summ)
+            if eval_summary['accuracy'] > best_val_acc:
+                
+                logging.info("* Found better model *")
+                best_val_acc = eval_summary['accuracy']
+                self.save_model(
+                    checkpoint_dir=self.checkpoint_dir,
+                    is_best=True
+                )
+        
+            # if current_steps and current_steps % self.save_steps == 0:
+                # self.save_model(os.path.join(self.output_dir, f"checkpoint_step_{current_steps}.pt"))
 
 
     def evaluate(self):
@@ -83,9 +126,9 @@ class ClassifierTrainer():
         running_loss = 0
         all_labels = []
         all_predictions = []
-        with tqdm(self.eval_dataloader, unit="batch") as tepoch:
+        with tqdm(self.eval_dataloader, unit="batch", colour="cyan") as tepoch:
             for text_embeddings, labels in tepoch:
-                tepoch.set_description(f"Eval ")
+                tepoch.set_description("+ Eval".ljust(10))
                 all_labels.extend(labels.tolist())
                 outputs = self.encoder(text_embeddings.to(self.device))
                 loss = self.loss_function(outputs, labels.to(self.device))
@@ -93,7 +136,7 @@ class ClassifierTrainer():
                 probs = torch.softmax(outputs, dim=-1)
                 preds = torch.argmax(probs, dim=-1)
                 all_predictions.extend(preds.tolist())
-        eval_summary['eval_loss'] = running_loss / len(self.eval_dataloader.dataset)
+        eval_summary['loss'] = running_loss / len(self.eval_dataloader.dataset)
         eval_summary['accuracy'] = accuracy_score(all_labels, all_predictions)
         eval_summary['precision'] = precision_score(all_labels, all_predictions, average='macro')
         eval_summary['recall'] = recall_score(all_labels, all_predictions, average='macro')
@@ -103,7 +146,7 @@ class ClassifierTrainer():
 
 
 
-    def save_model(self, model_path):
+    def save_model(self, checkpoint_dir, is_best=False):
         state = {
             'state_dict': self.encoder.state_dict(),
             'vocab_dict': self.model.vocab_dict,
@@ -111,5 +154,10 @@ class ClassifierTrainer():
             'hidden_size': self.encoder.hidden_size,
             'dropout': self.encoder.dropout_prob
         }
-        with open(model_path, 'wb') as f:
+
+        file_path = os.path.join(checkpoint_dir, "last.pt")
+        with open(file_path, 'wb') as f:
             torch.save(state, f, _use_new_zipfile_serialization=False)
+        
+        if is_best:
+            shutil.copyfile(file_path, os.path.join(checkpoint_dir, 'best.pt'))

@@ -4,3 +4,13 @@ __pycache__/
 *.pt
 
 log
+
+data/**
+experiments/**
+**__pycache__/
+**ipynb_checkpoints/
+!.gitkeep
+experiments/base_model/**
+!params.json
+log/**
+.env/

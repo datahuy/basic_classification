@@ -57,7 +57,6 @@ class ClassfierModel():
         self.encoder = Encoder(
             config
         )
-        self.encoder.eval()
     
     def preprocess(self, input):
         tokens = list(map(lambda x: [self.vocab_dict[w] if w in self.vocab_dict else self.vocab_dict['UNK'] for w in x.split(' ')], input))
@@ -69,6 +68,7 @@ class ClassfierModel():
         return text_embeddings
 
     def predict(self, input: List, batch_size):
+        self.encoder.eval()
         text_embeddings = self.preprocess(input)
         probs = []
         preds = []

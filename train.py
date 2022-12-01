@@ -1,3 +1,6 @@
+from cmath import log
+from http.client import ImproperConnectionState
+import logging
 from main.models.model import ClassfierModel
 from main.models.trainer import ClassifierTrainer
 from main.data.classifier_dataset import ClassifierDataset
@@ -6,6 +9,8 @@ import argparse
 import os
 import yaml
 import torch
+
+import utils
 
 def collate_fn(data):
     text, label = zip(*data)
@@ -60,7 +65,31 @@ if __name__ == "__main__":
 
     if not os.path.exists(data_dir) or not os.listdir(data_dir):
         raise ValueError(f"{data_dir} does not exist or is empty.")
-        
+    
+    if not os.path.exists(config_path):
+        raise ValueError(f"{config_path} does not exist")
+
+    # Load config parameteers
+    config = load_config(config_path)
+    model_config = config['model_config']
+    training_config = config['training_config']
+    checkpoint_dir = training_config['checkpoint_dir']
+
+    os.makedirs(checkpoint_dir, exist_ok=True)
+
+    # Set the random seed for reproducible experiments
+    torch.manual_seed(100)
+    if int(training_config["gpu"]) >= 0:
+        torch.cuda.manual_seed(100)
+
+    print(checkpoint_dir)
+    # Set the logger
+    log_path = os.path.join(checkpoint_dir, "train.log")
+    utils.set_logger(log_path=log_path)
+
+    # Create the input data pipeline
+    logging.info("Loading the datasets...")
+
     with open(os.path.join(data_dir, 'labels.txt'), 'r') as f:
         labels = f.read().splitlines()
     label2index = {labels[i]: i for i in range(len(labels))}
@@ -70,17 +99,10 @@ if __name__ == "__main__":
         vocab = f.read().splitlines()
     vocab_dict = {vocab[i]: i for i in range(len(vocab))}
 
-    if not os.path.exists(config_path):
-        raise ValueError(f"{config_path} does not exist")
-
-    config = load_config(config_path)
-    model_config = config['model_config']
-    training_config = config['training_config']
-    output_dir = training_config['output_dir']
+    
     # if os.path.exists(output_dir) and os.listdir(output_dir):
     #     raise ValueError(f"{output_dir} exists and is not empty.")
     # else:
-    os.makedirs(output_dir, exist_ok=True)
 
     main()
 
