@@ -1,5 +1,7 @@
 from main.utils.model_utils import load_model
 import logging
+
+
 class BaseClassifier():
     def __init__(self, model_path, batch_size, name):
         logging.info(f"Finish loading {name}!")
@@ -11,7 +13,7 @@ class BaseClassifier():
         return input
 
     def postprocess(self, preds, probs, threshold):
-        output = [preds[i] if probs[i]>threshold else self.model.index2label[0] for i in range(len(preds))]
+        output = [preds[i] if probs[i] > threshold else self.model.index2label[0] for i in range(len(preds))]
         return output
 
     def predict(self, input, threshold):
@@ -20,4 +22,3 @@ class BaseClassifier():
         output = self.postprocess(preds, probs, threshold)
 
         return output, probs
-

@@ -4,6 +4,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from typing import List
 
+
 class Encoder(nn.Module):
     def __init__(self, config):
         super(Encoder, self).__init__()
@@ -53,18 +54,18 @@ class ClassfierModel():
 
         # Define the encoder
         config['label_size'] = len(index2label)
-        config['max_words'] = len(vocab_dict) 
+        config['max_words'] = len(vocab_dict)
         self.encoder = Encoder(
             config
         )
-    
+
     def preprocess(self, input):
-        tokens = list(map(lambda x: [self.vocab_dict[w] if w in self.vocab_dict else self.vocab_dict['UNK'] for w in x.split(' ')], input))
+        tokens = list(map(lambda x: [self.vocab_dict[w] if w in self.vocab_dict else self.vocab_dict['UNK'] for w in
+                                     x.split(' ')], input))
         text_embeddings = torch.zeros(len(input), len(self.vocab_dict))
         for idx, item in enumerate(tokens):
             item = torch.LongTensor(item)
             text_embeddings[idx].index_add_(0, item, torch.ones(item.size()))
-
         return text_embeddings
 
     def predict(self, input: List, batch_size):
@@ -73,10 +74,9 @@ class ClassfierModel():
         preds = []
         with torch.no_grad():
             for i in range(0, len(input), batch_size):
-                outputs = self.encoder(text_embeddings[i:i+batch_size])
+                outputs = self.encoder(text_embeddings[i:i + batch_size])
                 outputs = torch.softmax(outputs, dim=-1)
                 cur_probs, cur_preds = torch.max(outputs, dim=-1)
                 preds.extend([self.index2label[p] for p in cur_preds.tolist()])
                 probs.extend(cur_probs.tolist())
-
         return preds, probs
