@@ -79,10 +79,7 @@ if __name__ == "__main__":
 
     # Set the random seed for reproducible experiments
     torch.manual_seed(100)
-    if int(training_config["gpu"]) >= 0:
-        torch.cuda.manual_seed(100)
 
-    print(checkpoint_dir)
     # Set the logger
     log_path = os.path.join(checkpoint_dir, "train.log")
     utils.set_logger(log_path=log_path)
@@ -90,6 +87,11 @@ if __name__ == "__main__":
     # Create the input data pipeline
     logging.info("Loading the datasets...")
 
+    if int(training_config["gpu"]) >= 0:
+        logging.info("Training on GPU")
+        torch.cuda.manual_seed(100)
+    else:
+        logging.info("Trainging on CPU")
     with open(os.path.join(data_dir, 'labels.txt'), 'r') as f:
         labels = f.read().splitlines()
     label2index = {labels[i]: i for i in range(len(labels))}
