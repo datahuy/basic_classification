@@ -14,3 +14,4 @@ experiments/base_model/**
 !params.json
 log/**
 .env/
+*.ipynb
