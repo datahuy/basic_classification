@@ -69,7 +69,7 @@ class ClassifierTrainer():
                     
                     probs = torch.softmax(outputs, dim=-1)
                     preds = torch.argmax(probs, dim=-1)
-                    train_acc += accuracy_score(labels, preds)
+                    train_acc += accuracy_score(labels, preds.cpu())
                     train_acc_avg = train_acc / current_batch
 
                     train_summary = {
