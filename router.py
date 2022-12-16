@@ -40,8 +40,8 @@ def root():
     return {"message": "Product Classification"}
 
 
-@app.post("/pd-industry-classification/category-l1/")
-def category_l1(body_params: Level1Body):
+@app.post("/pd-industry-classification/fmcg_l1_cls/")
+def fmcg_l1_cls(body_params: Level1Body):
     product_name = body_params.product_name
     if type(product_name) == str:
         product_name = [product_name]
