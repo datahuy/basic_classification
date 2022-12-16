@@ -80,3 +80,11 @@ class ClassfierModel():
                 preds.extend([self.index2label[p] for p in cur_preds.tolist()])
                 probs.extend(cur_probs.tolist())
         return preds, probs
+
+    def encode(self, input: List, batch_size):
+        text_embeddings = self.preprocess(input)
+        outputs = []
+        with torch.no_grad():
+            for i in range(0, len(input), batch_size):
+                outputs.extend(self.encoder(text_embeddings[i:i + batch_size]).tolist())
+        return outputs

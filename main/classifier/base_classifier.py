@@ -20,5 +20,11 @@ class BaseClassifier():
         input = self.preprocess(input)
         preds, probs = self.model.predict(input, self.batch_size)
         output = self.postprocess(preds, probs, threshold)
-
         return output, probs
+
+    def encode(self, input):
+        '''
+        to extract the penultimate layer of the model
+        '''
+        input = self.preprocess(input)
+        return self.model.encode(input, self.batch_size)
