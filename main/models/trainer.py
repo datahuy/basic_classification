@@ -7,12 +7,13 @@ import torch.nn.functional as F
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import os
 
+
 class ClassifierTrainer():
-    def __init__(self, 
-                model,
-                train_dataloader,
-                eval_dataloader,
-                training_config):
+    def __init__(self,
+                 model,
+                 train_dataloader,
+                 eval_dataloader,
+                 training_config):
         self.__dict__.update(training_config)
         self.model = model
         self.train_dataloader = train_dataloader
@@ -45,17 +46,18 @@ class ClassifierTrainer():
 
                     outputs = self.encoder(text_embeddings.to(self.device))
                     loss = self.loss_function(outputs, labels.to(self.device))
-                
+
                     # Compute gradients of loss function with all variables
                     loss.backward()
                     torch.nn.utils.clip_grad_norm_(self.encoder.parameters(), .5)
-                
+
                     # Performs updates using calculated gradients
                     self.optimizer.step()
 
-                    running_loss += loss.item()*self.train_batch_size
+                    running_loss += loss.item() * self.train_batch_size
                     if i and i % self.logging_steps == 0:
-                        train_summary = {'train_loss': running_loss/(i*self.train_batch_size), 'steps': f"{current_steps}/{total_steps}"}
+                        train_summary = {'train_loss': running_loss / (i * self.train_batch_size),
+                                         'steps': f"{current_steps}/{total_steps}"}
                         print('\n', train_summary)
                         running_loss = 0
                     i += 1
@@ -69,11 +71,9 @@ class ClassifierTrainer():
                             min_loss = eval_summary['eval_loss']
                             print('Best model so far, eval loss = ', min_loss)
                             self.save_model(os.path.join(self.output_dir, f"best.pt"))
-                    
+
                     if current_steps and current_steps % self.save_steps == 0:
                         self.save_model(os.path.join(self.output_dir, f"checkpoint_step_{current_steps}.pt"))
-
-
 
     def evaluate(self):
         eval_summary = {}
@@ -100,8 +100,6 @@ class ClassifierTrainer():
         eval_summary['f1'] = f1_score(all_labels, all_predictions, average='macro')
 
         return eval_summary, all_predictions
-
-
 
     def save_model(self, model_path):
         state = {

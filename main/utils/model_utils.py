@@ -1,6 +1,7 @@
 import torch
 from main.models.model import ClassfierModel
 
+
 def load_model(model_file, use_gpu=False):
     # load the pre-trained model
     with open(model_file, 'rb') as f:

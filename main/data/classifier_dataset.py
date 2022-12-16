@@ -1,6 +1,7 @@
 from torch.utils.data import Dataset
 import os
 
+
 class ClassifierDataset(Dataset):
     def __init__(self, data_dir, split, label2index):
         super(ClassifierDataset, self).__init__()
