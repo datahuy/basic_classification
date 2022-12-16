@@ -9,6 +9,5 @@ class IndustryClassifier(BaseClassifier):
 
     def preprocess(self, input):
         input = list(map(clean_text, input))
-
         return input
 
