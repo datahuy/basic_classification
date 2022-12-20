@@ -1,13 +1,10 @@
 import argparse
-import json
 import os
-from re import T
 
-import pandas as pd
 from sklearn.model_selection import train_test_split
-from tqdm import tqdm
 
-
+import utils
+from main.utils.preprocess_text.preproces_industry_cls import clean_text
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='data/data_demo', help="Directory containing the dataset")
@@ -53,6 +50,8 @@ if __name__ == "__main__":
         sep=','
     )
     print("- Done!")
+
+    raw_data['sentences'] = list(map(clean_text, raw_data['sentences']))
 
     """Split the dataset into train, val and test
     (dummy split with no shuffle)"""

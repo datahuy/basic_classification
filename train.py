@@ -1,5 +1,3 @@
-from cmath import log
-from http.client import ImproperConnectionState
 import logging
 from main.models.model import ClassfierModel
 from main.models.trainer import ClassifierTrainer
