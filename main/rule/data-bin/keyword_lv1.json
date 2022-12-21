@@ -83,7 +83,15 @@
         "nước ngọt",
         "rượu",
         "pepsi",
-        "coca"
+        "coca",
+        "trà sữa",
+        "vang",
+        "chanh muối",
+        "xá xị",
+        "nước gạo",
+        "nước ép",
+        "nước dừa",
+        "nước khoáng"
     ],
     "Gạo, bột và thực phẩm khô": [
         "phở",
@@ -481,6 +489,11 @@
         "vớ",
         "vở",
         "vòng tay",
-        "xếp hình"
+        "xếp hình",
+        "bút",
+        "đồ chơi",
+        "thiên long",
+        "bài tập",
+        "lớp"
     ]
 }
