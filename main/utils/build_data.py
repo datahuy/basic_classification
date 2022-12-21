@@ -15,10 +15,13 @@ def load_csv(csv_file, col_sentences, col_labels, sep):
     """
 
     df = pd.read_csv(csv_file, sep=sep)
+    df = df.astype(str)
+    # Remove new line character in sentences
+    df[col_sentences] = df[col_sentences].str.replace('\n', ' ')
     data = {
         "sentences": list(df[col_sentences].values),
         "labels": list(df[col_labels].values)
-    }
+    }           
     return data
 
 parser = argparse.ArgumentParser()
@@ -40,10 +43,10 @@ def save_dataset(data: dict, save_dir):
         os.makedirs(save_dir)
 
     # Export the dataset
-    with open(os.path.join(save_dir, 'sentences.txt'), 'w') as file_sentences:
+    with open(os.path.join(save_dir, 'sentences.txt'), 'w', encoding='utf-8') as file_sentences:
         file_sentences.write("\n".join(data['sentences']))
     
-    with open(os.path.join(save_dir, 'labels.txt'), 'w') as file_labels:
+    with open(os.path.join(save_dir, 'labels.txt'), 'w', encoding='utf-8') as file_labels:
         file_labels.write("\n".join(data['labels']))
     print("- Done!")
 
@@ -99,4 +102,4 @@ if __name__ == "__main__":
     # Save the datasets to files
     save_dataset(train_data, os.path.join(args.data_dir, 'train'))
     save_dataset(val_data, os.path.join(args.data_dir, 'val'))
-    save_dataset(val_data, os.path.join(args.data_dir, 'test'))
+    save_dataset(test_data, os.path.join(args.data_dir, 'test'))

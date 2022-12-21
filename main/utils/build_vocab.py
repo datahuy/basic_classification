@@ -8,7 +8,7 @@ from collections import Counter
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--min_count_word', default=1, help="Minimum count for words in the dataset", type=int)
-parser.add_argument('--data_dir', default='data/kiot-viet', help="Directory containing the dataset")
+parser.add_argument('--data_dir', default='data/training', help="Directory containing the dataset")
 
 # Hyper parameters for the vocab
 PAD_WORD = '<pad>'
@@ -39,7 +39,7 @@ def save_vocab(vocab, txt_path):
         vocab: (iterable object) yields token
         txt_path: (stirng) path to vocab file
     """
-    with open(txt_path, "w") as fo:
+    with open(txt_path, "w", encoding='utf-8') as fo:
         for token in vocab:
             fo.write(token + '\n')
 
@@ -70,7 +70,7 @@ if __name__ == '__main__':
     
     # Build labels vocab with train dataset
     print("Build labels vocabulary...")
-    with open(os.path.join(args.data_dir, 'train/labels.txt')) as fi:
+    with open(os.path.join(args.data_dir, 'train/labels.txt'), encoding = 'utf-8') as fi:
         labels = list(set(fi.read().splitlines()))
     print("- Done!")
 
