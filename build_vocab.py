@@ -71,13 +71,14 @@ if __name__ == '__main__':
     # Build labels vocab with train dataset
     print("Build labels vocabulary...")
     with open(os.path.join(args.data_dir, 'train/labels.txt')) as fi:
-        labels = list(set(fi.read().splitlines()))
+        labels = sorted(list(set(fi.read().splitlines())))
     print("- Done!")
 
     # Only keep most frequent tokens
     words = [tok for tok, count in words.items() if count >= args.min_count_word]
 
     # add word for unknown words 
+    words = sorted(words)
     words.append(UNK_WORD)
 
     # Save vocabularies to file
