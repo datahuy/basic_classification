@@ -85,11 +85,9 @@ if __name__ == "__main__":
     model_config = config['model_config']
     training_config = config['training_config']
     output_dir = os.path.join(training_config['output_dir'], category)
-    # if os.path.exists(output_dir) and os.listdir(output_dir):
-    #     raise ValueError(f"{output_dir} exists and is not empty.")
-    # else:
+
     os.makedirs(output_dir, exist_ok=True)
-    #main()
+    main()
     # from utils.model_utils import load_model
     # model = load_model('/home/nhinp/Documents/github_repo/pd-industry-classification/output_model/checkpoint_step_10.pt')
     # input = ['quần jeans kids air', 'quần jeans kids air']
