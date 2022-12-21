@@ -1,15 +1,25 @@
 import argparse
-import json
 import os
-from re import T
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from tqdm import tqdm
 
-import data_loader
-from preprocessing import clean_text
+def load_csv(csv_file, col_sentences, col_labels, sep):
+    """Load csv file, convert data to dictionary
 
+    Args:
+        csv_file: path to csv data
+        col_sentences: column containing sentences
+        col_labels: column containing labels
+        sep: delimiter between 2 columns
+    """
+
+    df = pd.read_csv(csv_file, sep=sep)
+    data = {
+        "sentences": list(df[col_sentences].values),
+        "labels": list(df[col_labels].values)
+    }
+    return data
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--data_dir', default='data/data_demo', help="Directory containing the dataset")
@@ -48,7 +58,7 @@ if __name__ == "__main__":
 
     # Load the dataset into memory
     print("\n\nLoading csv dataset into memory...")
-    raw_data = data_loader.load_csv(
+    raw_data = load_csv(
         csv_file=path_dataset,
         col_sentences='sentences',
         col_labels='labels',
