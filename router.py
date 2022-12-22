@@ -70,6 +70,34 @@ def fmcg_l1_cls(body_params: Level1Body):
             "message": f"Exception in : {e}"
         }
 
+@app.post("/pd-industry-classification/fmcg_l1_cls_model/")
+def fmcg_l1_cls_model(body_params: Level1Body):
+    product_name = body_params.product_name
+    if type(product_name) == str:
+        product_name = [product_name]
+    try:
+        start = time.time()
+        output_model = FMCG_l1_classifier.predict(product_name)
+        ret = {
+            "data": output_model,
+            "status": "success",
+            "status_code": 200,
+            "message": "done"
+        }
+        product_name_for_logging = ", ".join(product_name[:10])
+        product_name_for_logging += ", ..." if len(product_name) > 10 else ""
+        logging.info(f"Prediction for [{product_name_for_logging}] took {(time.time() - start):.4f} seconds.")
+
+        return ret
+    except Exception as e:
+        logging.error(e)
+        return {
+            "data": product_name,
+            "status": "error",
+            "status_code": 500,
+            "message": f"Exception in : {e}"
+        }
+
 
 @app.post("/pd-industry-classification/industry_cls/")
 def industry_cls(body_params: Level0Body):
