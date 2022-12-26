@@ -68,7 +68,7 @@ def fmcg_l1_cls(body_params: Level1Body):
     try:
         start = time.time()
         if not self_category:
-            self_category = [None for _ in range(len(product_name))]
+            self_category = ['' for _ in range(len(product_name))]
         merged = FMCG_l1_classifier.predict(name_input=product_name,
                                             self_category_input=self_category,
                                             model_threshold=body_params.model_threshold)
