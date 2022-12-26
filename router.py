@@ -21,10 +21,17 @@ logging.basicConfig(
 # Define classification models
 industry_classifier = IndustryClassifier('model/industry_cls_best_1129.pt', batch_size=128)
 FMCG_classifier = FMCGClassifier('model/model_fmcg_binary_best_converted.pt', batch_size=128)
-FMCG_l1_classifier = FMCGl1Classifier('model/industry_cls_l1.pt', 'main/rule/data-bin/keyword_lv1.json', batch_size=128, default_class='Không xác định')
+FMCG_l1_classifier = FMCGl1Classifier(
+    model_path='model/industry_cls_l1.pt', 
+    rule_json_path='main/rule/data-bin/keyword_lv1.json',
+    category_json_path='main/rule/data-bin/self_category_lv1.json',
+    batch_size=128,
+    default_class='Không xác định'
+    )
 
 class Level1Body(BaseModel):
     product_name: Union[str, list]
+    self_category: Union[str, list] = None
     model_threshold: int = 0.9
 
 class Level0Body(BaseModel):
@@ -43,11 +50,28 @@ def root():
 @app.post("/pd-industry-classification/fmcg_l1_cls/")
 def fmcg_l1_cls(body_params: Level1Body):
     product_name = body_params.product_name
+    self_category = body_params.self_category
     if type(product_name) == str:
         product_name = [product_name]
+    if type(self_category) == str:
+        self_category = [self_category]
+
+    # ensure that product_name and self_category have the same length
+    if self_category is not None and len(product_name) != len(self_category):
+        return {
+            "data": (product_name, self_category),
+            "status": "error",
+            "status_code": 500,
+            "message": f"Length of product_name and self_category must be the same"
+        }
+    
     try:
         start = time.time()
-        merged = FMCG_l1_classifier.predict(product_name, model_threshold=body_params.model_threshold)
+        if not self_category:
+            self_category = [None for _ in range(len(product_name))]
+        merged = FMCG_l1_classifier.predict(name_input=product_name,
+                                            self_category_input=self_category,
+                                            model_threshold=body_params.model_threshold)
         ret = {
             "data": merged,
             "status": "success",

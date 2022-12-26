@@ -6,7 +6,8 @@ import sys
 from typing import List
 
 logging.basicConfig(
-    level=logging.INFO,
+    level=logging.WARNING,
+    # level=logging.INFO,
     format='%(asctime)s - %(name)s - {%(pathname)s:%(lineno)d} - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout)
@@ -42,22 +43,31 @@ class FMCGl1RuleClassifier():
 
 
 class FMCGl1Classifier():
-    def __init__(self, model_path, json_path, batch_size=128, default_class='Không xác định'):
+    def __init__(self, model_path, rule_json_path, category_json_path, batch_size=128, default_class='Không xác định'):
         self.model = FMCGl1ModelClassifier(model_path, batch_size, default_class)
-        self.rule = FMCGl1RuleClassifier(json_path, batch_size)
+        self.rule = FMCGl1RuleClassifier(rule_json_path, batch_size)
+        self.category = FMCGl1RuleClassifier(category_json_path, batch_size)
         logging.info('Finish loading FMCG l1 classifier!')
 
-    def predict(self, input:List, model_threshold=0.9) -> List:
+    def predict(self, name_input:List, self_category_input, model_threshold=0.9) -> List:
         '''
-        get result of rule classifier and their index
-        for those whose rule result is 'unk', get result of model classifier
+        get result of rule classifier on name_input and their index
+        for those whose rule result is 'không xác định', get result of model classifier on name_input
+        for those whose result is still 'không xác định', get result of category classifier on self_category_input
         merge the result back by their index
         '''
-        rule_preds = self.rule.predict(input)
-        index_to_run_model = [i for i, x in enumerate(rule_preds) if x == 'unk']
+        rule_preds = self.rule.predict(name_input)
+        logging.info(f"rule_preds: {rule_preds}")
+        index_to_run_model = [i for i, x in enumerate(rule_preds) if x == 'Không xác định']
         if len(index_to_run_model) > 0:
-            model_preds = self.model.predict([input[i] for i in index_to_run_model], threshold=model_threshold)[0]
+            model_preds = self.model.predict([name_input[i] for i in index_to_run_model], threshold=model_threshold)[0]
             for i, pred in zip(index_to_run_model, model_preds):
                 rule_preds[i] = pred
+        logging.info(f"rule_preds after model: {rule_preds}")
+        index_to_run_category = [i for i, x in enumerate(rule_preds) if x == 'Không xác định']
+        if len(index_to_run_category) > 0:
+            category_preds = self.category.predict([self_category_input[i] for i in index_to_run_category])
+            for i, pred in zip(index_to_run_category, category_preds):
+                rule_preds[i] = pred
+        logging.info(f"rule_preds after category: {rule_preds}")
         return rule_preds
-
