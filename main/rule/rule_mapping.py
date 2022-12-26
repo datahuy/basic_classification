@@ -16,13 +16,23 @@ def reverse_dict(d):
             reversed_dict[v] = key
     return reversed_dict
 
-
 def build_regex(keywords):
     keyword_list = sorted(keywords.keys(), key=lambda x: len(x), reverse=True)
     pattern = f'(?<=\\b)({"|".join(keyword_list)})(?=\\b)'
     pattern = re.compile(pattern)
     return pattern
 
+def remove_accent(input_str: str) -> str:
+    s1 = u'ÀÁÂÃÈÉÊÌÍÒÓÔÕÙÚÝàáâãèéêìíòóôõùúýĂăĐđĨĩŨũƠơƯưẠạẢảẤấẦầẨẩẪẫẬậẮắẰằẲẳẴẵẶặẸẹẺẻẼẽẾếỀềỂểỄễỆệỈỉỊịỌọỎỏỐốỒồỔổỖỗỘộỚớỜờỞởỠỡỢợỤụỦủỨứỪừỬửỮữỰựỲỳỴỵỶỷỸỹ'
+    s0 = u'AAAAEEEIIOOOOUUYaaaaeeeiioooouuyAaDdIiUuOoUuAaAaAaAaAaAaAaAaAaAaAaAaEeEeEeEeEeEeEeEeIiIiOoOoOoOoOoOoOoOoOoOoOoOoUuUuUuUuUuUuUuYyYyYyYy'
+    
+    s = ''
+    for c in input_str:
+        if c in s1:
+            s += s0[s1.index(c)]
+        else:
+            s += c
+    return s
 
 def mapping(string, keywords, pattern):
     string = string.lower()

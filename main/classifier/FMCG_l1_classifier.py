@@ -1,5 +1,5 @@
 from main.classifier.base_classifier import BaseClassifier
-from main.rule.rule_mapping import read_json, rule_predict_batch, reverse_dict, build_regex
+from main.rule.rule_mapping import read_json, rule_predict_batch, reverse_dict, build_regex, remove_accent
 from main.utils.preprocess_text.preproces_industry_cls import clean_text
 import logging
 import sys 
@@ -32,7 +32,17 @@ class FMCGl1ModelClassifier(BaseClassifier):
 
 class FMCGl1RuleClassifier():
     def __init__(self, json_path, batch_size=128):
-        self.keywords = reverse_dict(read_json(json_path))
+        self.keywords = read_json(json_path)
+
+        # for each category, we have a list of keywords. Now remove accent of the keywords (for those that have length >= 6) and add them to the dict
+        for category, keywords in self.keywords.items():
+            keywords_no_accent = []
+            for keyword in keywords:
+                if len(keyword) >= 6:
+                    keywords_no_accent.append(remove_accent(keyword))
+            self.keywords[category] += keywords_no_accent
+
+        self.keywords = reverse_dict(self.keywords)
         self.pattern = build_regex(self.keywords)
         self.batch_size = batch_size
         logging.info('Finish loading FMCG l1 rule classifier!')
@@ -56,14 +66,22 @@ class FMCGl1Classifier():
         for those whose result is still 'không xác định', get result of category classifier on self_category_input
         merge the result back by their index
         '''
-        rule_preds = self.rule.predict(name_input)
+        # concat self_category_input with name_input
+        name_input_with_category = [f"{name} {category}" for name, category in zip(name_input, self_category_input)]
+
+        # run rule classifier on name_input_with_category
+        rule_preds = self.rule.predict(name_input_with_category)
         logging.info(f"rule_preds: {rule_preds}")
+
+        # run model classifier on name_input
         index_to_run_model = [i for i, x in enumerate(rule_preds) if x == 'Không xác định']
         if len(index_to_run_model) > 0:
             model_preds = self.model.predict([name_input[i] for i in index_to_run_model], threshold=model_threshold)[0]
             for i, pred in zip(index_to_run_model, model_preds):
                 rule_preds[i] = pred
         logging.info(f"rule_preds after model: {rule_preds}")
+
+        # run category classifier on self_category_input
         index_to_run_category = [i for i, x in enumerate(rule_preds) if x == 'Không xác định']
         if len(index_to_run_category) > 0:
             category_preds = self.category.predict([self_category_input[i] for i in index_to_run_category])
