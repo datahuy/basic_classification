@@ -5,7 +5,7 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 from main.classifier.industry_classifier import IndustryClassifier
 from main.classifier.FMCG_classifier import FMCGClassifier
-from main.classifier.FMCG_l1_classifier import FMCGl1Classifier, FMCGl1RuleClassifier
+from main.classifier.FMCG_l1_classifier import FMCGl1Classifier
 import time
 from main.utils.pipeline import merge_output
 
@@ -21,11 +21,11 @@ logging.basicConfig(
 # Define classification models
 industry_classifier = IndustryClassifier('model/industry_cls_best_1129.pt', batch_size=128)
 FMCG_classifier = FMCGClassifier('model/model_fmcg_binary_best_converted.pt', batch_size=128)
-FMCG_l1_classifier = FMCGl1Classifier('model/industry_cls_l1.pt', batch_size=128)
-FMCG_l1_rule_classifier = FMCGl1RuleClassifier('main/rule/data-bin/keyword_lv1.json', batch_size=128)
+FMCG_l1_classifier = FMCGl1Classifier('model/industry_cls_l1.pt', 'main/rule/data-bin/keyword_lv1.json', batch_size=128, default_class='Không xác định')
 
 class Level1Body(BaseModel):
     product_name: Union[str, list]
+    model_threshold: int = 0.9
 
 class Level0Body(BaseModel):
     product_name: Union[str, list]
@@ -47,39 +47,9 @@ def fmcg_l1_cls(body_params: Level1Body):
         product_name = [product_name]
     try:
         start = time.time()
-        output_model = FMCG_l1_classifier.predict(product_name)
-        output_rule = FMCG_l1_rule_classifier.predict(product_name)
-        merged = merge_output(model_output=output_model, rule_output=output_rule)
+        merged = FMCG_l1_classifier.predict(product_name, model_threshold=body_params.model_threshold)
         ret = {
             "data": merged,
-            "status": "success",
-            "status_code": 200,
-            "message": "done"
-        }
-        product_name_for_logging = ", ".join(product_name[:10])
-        product_name_for_logging += ", ..." if len(product_name) > 10 else ""
-        logging.info(f"Prediction for [{product_name_for_logging}] took {(time.time() - start):.4f} seconds.")
-
-        return ret
-    except Exception as e:
-        logging.error(e)
-        return {
-            "data": product_name,
-            "status": "error",
-            "status_code": 500,
-            "message": f"Exception in : {e}"
-        }
-
-@app.post("/pd-industry-classification/fmcg_l1_cls_model/")
-def fmcg_l1_cls_model(body_params: Level1Body):
-    product_name = body_params.product_name
-    if type(product_name) == str:
-        product_name = [product_name]
-    try:
-        start = time.time()
-        output_model = FMCG_l1_classifier.predict(product_name)
-        ret = {
-            "data": output_model,
             "status": "success",
             "status_code": 200,
             "message": "done"
