@@ -8,7 +8,7 @@ from collections import Counter
 
 parser = argparse.ArgumentParser()
 parser.add_argument('--min_count_word', default=1, help="Minimum count for words in the dataset", type=int)
-parser.add_argument('--data_dir', default='data/training', help="Directory containing the dataset")
+parser.add_argument('--data_dir', default='data/', help="Directory containing the dataset")
 
 # Hyper parameters for the vocab
 PAD_WORD = '<pad>'
