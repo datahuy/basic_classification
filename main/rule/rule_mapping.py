@@ -30,7 +30,7 @@ def mapping(string, keywords, pattern):
     if match:
         return keywords[match.group()]
     else:
-        return 'unk'
+        return 'Không xác định'
         
 
 def rule_predict_batch(input: List, batch_size, keywords, pattern):
