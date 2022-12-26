@@ -30,7 +30,7 @@ def load_config(config_path):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a product classifier')
-    parser.add_argument('--data_dir', default='data/training/')
+    parser.add_argument('--data_dir', default='data/')
     parser.add_argument('--config_path', default='data/config.yaml')
     parser.add_argument('--category', default='l1')
     args = parser.parse_args()
