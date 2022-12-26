@@ -1,7 +1,5 @@
 
 import logging
-from datetime import date
-import os
 import sys
 from typing import Union
 from fastapi import FastAPI
