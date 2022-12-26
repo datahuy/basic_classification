@@ -37,7 +37,7 @@ def rule_predict_batch(input: List, batch_size, keywords, pattern):
     output = []
     for i in tqdm(range(0, len(input), batch_size)):
         input_batch = input[i:i + batch_size]
-        input_batch = [x.lower() for x in input_batch]
+        input_batch = [str(x).lower() for x in input_batch]
         output_batch = [mapping(x, keywords, pattern) for x in input_batch]
         output.extend(output_batch)
     return output
