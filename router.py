@@ -86,7 +86,7 @@ def fmcg_l1_cls(body_params: Level1Body):
     except Exception as e:
         logging.error(e)
         return {
-            "data": product_name,
+            "data": (product_name, self_category),
             "status": "error",
             "status_code": 500,
             "message": f"Exception in : {e}"
