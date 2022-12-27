@@ -3,7 +3,12 @@ __pycache__/
 
 test.ipynb
 test_infer.py
+test.py
 log
 
 openmax/
 openmax.py
+
+output_model/
+test/
+data/
