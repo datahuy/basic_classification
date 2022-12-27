@@ -1,8 +1,11 @@
 import argparse
 import os
+import logging
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
+
+logging.basicConfig(level=logging.INFO)
 
 def load_csv(csv_file, col_sentences, col_labels, sep):
     """Load csv file, convert data to dictionary
@@ -15,14 +18,18 @@ def load_csv(csv_file, col_sentences, col_labels, sep):
     """
 
     df = pd.read_csv(csv_file, sep=sep)
+    df = df.astype(str)
+    # Remove new line character in sentences
+    df[col_sentences] = df[col_sentences].str.replace('\n', ' ').str.replace('\r', ' ').str.strip()
     data = {
         "sentences": list(df[col_sentences].values),
         "labels": list(df[col_labels].values)
-    }
+    }           
+    # logging.info(f"data: {data}")
     return data
 
 parser = argparse.ArgumentParser()
-parser.add_argument('--data_dir', default='data/data_demo', help="Directory containing the dataset")
+parser.add_argument('--data_dir', default='data/', help="Directory containing the dataset")
 parser.add_argument('--data_name', default='product.csv', help='Name of file data')
 
 
@@ -40,11 +47,13 @@ def save_dataset(data: dict, save_dir):
         os.makedirs(save_dir)
 
     # Export the dataset
-    with open(os.path.join(save_dir, 'sentences.txt'), 'w') as file_sentences:
+    with open(os.path.join(save_dir, 'sentences.txt'), 'w', encoding='utf-8') as file_sentences:
         file_sentences.write("\n".join(data['sentences']))
+    logging.info("Number of sentences: {}".format(len(data['sentences'])))
     
-    with open(os.path.join(save_dir, 'labels.txt'), 'w') as file_labels:
+    with open(os.path.join(save_dir, 'labels.txt'), 'w', encoding='utf-8') as file_labels:
         file_labels.write("\n".join(data['labels']))
+    logging.info("Number of labels: {}".format(len(data['labels'])))
     print("- Done!")
 
 
@@ -99,4 +108,4 @@ if __name__ == "__main__":
     # Save the datasets to files
     save_dataset(train_data, os.path.join(args.data_dir, 'train'))
     save_dataset(val_data, os.path.join(args.data_dir, 'val'))
-    save_dataset(val_data, os.path.join(args.data_dir, 'test'))
+    save_dataset(test_data, os.path.join(args.data_dir, 'test'))

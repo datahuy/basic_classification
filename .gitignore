@@ -5,6 +5,7 @@ test.ipynb
 test_infer.py
 test.py
 log
+test/
 
 openmax/
 openmax.py

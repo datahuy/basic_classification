@@ -30,7 +30,7 @@ def load_config(config_path):
 
 def parse_args():
     parser = argparse.ArgumentParser(description='Train a product classifier')
-    parser.add_argument('--data_dir', default='data/processed/l1')
+    parser.add_argument('--data_dir', default='data/')
     parser.add_argument('--config_path', default='data/config.yaml')
     parser.add_argument('--category', default='l1')
     args = parser.parse_args()
@@ -68,13 +68,13 @@ if __name__ == "__main__":
     if not os.path.exists(data_dir) or not os.listdir(data_dir):
         raise ValueError(f"{data_dir} does not exist or is empty.")
 
-    with open(os.path.join(data_dir, 'labels.txt'), 'r') as f:
+    with open(os.path.join(data_dir, 'labels.txt'), 'r', encoding='utf-8') as f:
         labels = f.read().splitlines()
     label2index = {labels[i]: i for i in range(len(labels))}
     print(label2index)
     index2label = {i: labels[i] for i in range(len(labels))}
     print(index2label)
-    with open(os.path.join(data_dir, 'words.txt'), 'r') as f:
+    with open(os.path.join(data_dir, 'words.txt'), 'r', encoding='utf-8') as f:
         vocab = f.read().splitlines()
     vocab_dict = {vocab[i]: i for i in range(len(vocab))}
     print("vocab size: ", len(vocab_dict))
@@ -85,13 +85,6 @@ if __name__ == "__main__":
     model_config = config['model_config']
     training_config = config['training_config']
     output_dir = os.path.join(training_config['output_dir'], category)
-    # if os.path.exists(output_dir) and os.listdir(output_dir):
-    #     raise ValueError(f"{output_dir} exists and is not empty.")
-    # else:
+
     os.makedirs(output_dir, exist_ok=True)
-    #main()
-    # from utils.model_utils import load_model
-    # model = load_model('/home/nhinp/Documents/github_repo/pd-industry-classification/output_model/checkpoint_step_10.pt')
-    # input = ['quần jeans kids air', 'quần jeans kids air']
-    # output = model.predict_batch(input)
-    # print(output)
+    main()
