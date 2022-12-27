@@ -1,5 +1,6 @@
 {
     "Bánh, kẹo, snack": [
+        "alpenliebe",
         "bánh",
         "bánh bao",
         "bánh bông lan",
@@ -239,6 +240,7 @@
         "cung cấp độ ẩm",
         "cung cấp dưỡng",
         "dán mũi",
+        "dg",
         "dầu gội",
         "dầu tẩy trang",
         "dầu tắm",
@@ -540,9 +542,9 @@
         "royal canin"
     ],
     "Dầu ăn, nước chấm, gia vị": [
+        "aji",
         "aji-ngon",
         "aji-quick",
-        "aji-quicl",
         "ajinomoto",
         "basilico",
         "bột canh",
@@ -678,7 +680,6 @@
         "gia vị chấm",
         "nguyên liệu nấu ăn",
         "tương ớt, tương cà",
-        "tiêu",
         "bột nêm",
         "dầu tường an",
         "muối & tiêu",
@@ -911,6 +912,9 @@
     "Khác": [
         "sổ",
         "áo mưa",
+        "áo thun",
+        "áo dài",
+        "áo nỉ",
         "ba lô",
         "balo",
         "bao tay",
@@ -947,6 +951,10 @@
         "tay vịn",
         "thuốc lá",
         "thuốc lào",
+        "thuốc mèo",
+        "thuốc ngựa",
+        "văn phòng phẩm",
+        "vpp",
         "vớ",
         "vở",
         "vòng tay",
@@ -1212,6 +1220,7 @@
         "fami",
         "flan",
         "fristi",
+        "glucerna",
         "kem đặc",
         "lif",
         "meadow",
