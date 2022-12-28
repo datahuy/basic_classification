@@ -3,7 +3,7 @@ from main.rule.rule_mapping import read_json, rule_predict_batch, reverse_dict, 
 from main.utils.preprocess_text.preproces_industry_cls import clean_text
 import logging
 import sys 
-from typing import List
+from typing import List, Tuple
 
 logging.basicConfig(
     level=logging.WARNING,
@@ -59,7 +59,7 @@ class FMCGl1Classifier():
         self.category = FMCGl1RuleClassifier(category_json_path, batch_size)
         logging.info('Finish loading FMCG l1 classifier!')
 
-    def predict(self, name_input:List, self_category_input, model_threshold=0.9) -> List:
+    def predict(self, name_input:List, self_category_input, model_threshold=0.9) -> Tuple[List, List]:
         '''
         get result of rule classifier on name_input and their index
         for those whose rule result is 'không xác định', get result of model classifier on name_input
@@ -71,15 +71,8 @@ class FMCGl1Classifier():
 
         # run rule classifier on name_input_with_category
         rule_preds = self.rule.predict(name_input_with_category)
+        pred_method = ['rule'] * len(rule_preds)
         logging.info(f"rule_preds: {rule_preds}")
-
-        # run model classifier on name_input
-        index_to_run_model = [i for i, x in enumerate(rule_preds) if x == 'Không xác định']
-        if len(index_to_run_model) > 0:
-            model_preds = self.model.predict([name_input[i] for i in index_to_run_model], threshold=model_threshold)[0]
-            for i, pred in zip(index_to_run_model, model_preds):
-                rule_preds[i] = pred
-        logging.info(f"rule_preds after model: {rule_preds}")
 
         # run category classifier on self_category_input
         index_to_run_category = [i for i, x in enumerate(rule_preds) if x == 'Không xác định']
@@ -87,5 +80,22 @@ class FMCGl1Classifier():
             category_preds = self.category.predict([self_category_input[i] for i in index_to_run_category])
             for i, pred in zip(index_to_run_category, category_preds):
                 rule_preds[i] = pred
+                pred_method[i] = 'category'
         logging.info(f"rule_preds after category: {rule_preds}")
-        return rule_preds
+        
+        # run model classifier on name_input
+        index_to_run_model = [i for i, x in enumerate(rule_preds) if x == 'Không xác định']
+        if len(index_to_run_model) > 0:
+            model_preds = self.model.predict([name_input[i] for i in index_to_run_model], threshold=model_threshold)[0]
+            for i, pred in zip(index_to_run_model, model_preds):
+                rule_preds[i] = pred
+                pred_method[i] = 'model'
+        logging.info(f"rule_preds after model: {rule_preds}")
+
+
+        # set method to 'Không xác định' for those whose result is 'Không xác định'
+        for i, pred in enumerate(rule_preds):
+            if pred == 'Không xác định':
+                pred_method[i] = 'Không xác định'
+
+        return rule_preds, pred_method

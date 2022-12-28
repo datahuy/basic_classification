@@ -7,8 +7,6 @@ from main.classifier.industry_classifier import IndustryClassifier
 from main.classifier.FMCG_classifier import FMCGClassifier
 from main.classifier.FMCG_l1_classifier import FMCGl1Classifier
 import time
-from main.utils.pipeline import merge_output
-
 
 logging.basicConfig(
     level=logging.INFO,
@@ -69,11 +67,16 @@ def fmcg_l1_cls(body_params: Level1Body):
         start = time.time()
         if not self_category:
             self_category = ['' for _ in range(len(product_name))]
-        merged = FMCG_l1_classifier.predict(name_input=product_name,
+        level1, method = FMCG_l1_classifier.predict(name_input=product_name,
                                             self_category_input=self_category,
                                             model_threshold=body_params.model_threshold)
         ret = {
-            "data": merged,
+            "data": {
+                "product_name": product_name,
+                "self_category": self_category,
+                "level1": level1,
+                "method": method
+            },
             "status": "success",
             "status_code": 200,
             "message": "done"
