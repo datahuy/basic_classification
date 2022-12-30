@@ -109,7 +109,9 @@
         "hộp ăn vặt",
         "snacks",
         "snack, khô sấy",
-        "rong biển"
+        "rong biển",
+        "cháy tỏi",
+        "sấy giòn"
     ],
     "Ngũ cốc": [
         "calbee"
@@ -136,7 +138,8 @@
         "sôcôla"
     ],
     "Trái cây sấy, hạt khô": [
-        "hạt dẻ"
+        "hạt dẻ",
+        "nho khô"
     ],
     "Mứt, thạch": [
         "mứt",
@@ -974,8 +977,7 @@
         "vinacafé gói",
         "white coffee",
         "không độ",
-        "c2",
-        "nestle"
+        "c2"
     ],
     "Thức uống dinh dưỡng": [
         "detox",
@@ -1289,7 +1291,8 @@
         "bài tập",
         "lớp",
         "quần",
-        "dép"
+        "dép",
+        "áo"
     ],
     "Đồ dùng nhà bếp": [
         "ấm siêu tốc",
@@ -1522,7 +1525,8 @@
         "oggi",
         "bột ăn dặm",
         "aptamil",
-        "nan"
+        "nan",
+        "nestle"
     ],
     "Sữa tươi": [
         "ba vì",
@@ -1610,6 +1614,9 @@
     ],
     "Sữa và sản phẩm từ sữa khác": [
         "cream",
+        "nuti",
+        "vinamilk",
+        "vnm",
         "whipping",
         "sữa khác",
         "sữa cho người già",
@@ -1632,11 +1639,6 @@
         "ông thọ",
         "sữa đặc",
         "sữa ông thọ"
-    ],
-    "[sữa - to be processed]": [
-        "nuti",
-        "vinamilk",
-        "vnm"
     ],
     "Thịt": [
         "ba chỉ",

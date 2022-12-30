@@ -1,0 +1,54 @@
+{
+    "Bánh, kẹo, snack": {
+        "available_l2": ["Bánh, kẹo, snack khác", "Bánh quy, bánh xốp, bánh mềm", "Bánh tươi", "Kem", "Kẹo", "Mứt, thạch", "Ngũ cốc", "Snack, đồ ăn vặt", "Socola và sản phẩm từ socola", "Trái cây sấy, hạt khô"],
+        "default_l2": "Bánh, kẹo, snack khác"
+    },
+    "Chăm sóc cá nhân - Personal Care": {
+        "available_l2": ["Chăm sóc cá nhân khác", "Chăm sóc cơ thể", "Chăm sóc da mặt", "Chăm sóc phụ nữ", "Chăm sóc răng miệng", "Chăm sóc tóc", "Dụng cụ và phụ kiện", "Thực phẩm chức năng", "Y tế"],
+        "default_l2": "Chăm sóc cá nhân - Personal Care khác"
+    },
+    "Chăm sóc thú cưng": {
+        "available_l2": ["Phụ kiện cho thú cưng", "Thức ăn thú cưng", "Vệ sinh thú cưng"],
+        "default_l2": "Chăm sóc thú cưng khác"
+    },
+    "Dầu ăn, nước chấm, gia vị": {
+        "available_l2": ["Dầu ăn", "Dầu hào, giấm", "Đường", "Gia vị khác", "Muối, tiêu, hạt nêm, bột ngọt", "Nước mắm - Nước chấm", "Tương, sốt", "Nước cốt lẩu"],
+        "default_l2": "Dầu ăn, nước chấm, gia vị khác"
+    },
+    "Giặt giũ và chăm sóc nhà cửa": {
+        "available_l2": ["Giặt giũ và chăm sóc nhà cửa khác", "Bao bì, túi đựng rác", "Dụng cụ vệ sinh", "Giặt xả", "Giấy vệ sinh, khăn giấy", "Vệ sinh nhà cửa"],
+        "default_l2": "Giặt giũ và chăm sóc nhà cửa khác"
+    },
+    "Gạo, bột và thực phẩm khô": {
+        "available_l2": ["Bột các loại", "Đồ hộp", "Gạo, bột và thực phẩm khô khác", "Gạo, nếp", "Thực phẩm ăn liền", "Thực phẩm khô"],
+        "default_l2": "Gạo, bột và thực phẩm khô khác"
+    },
+    "Khác": {
+        "available_l2": ["Khác"],
+        "default_l2": "Khác"
+    },
+    "Nhà cửa và đời sống": {
+        "available_l2": ["Chăn, ga, gối, nệm", "Đồ dùng nhà bếp", "Đồ dùng phòng tắm", "Đồ thờ cúng", "Dụng cụ và thiết bị tiện ích", "Ngoại thất, sân vườn", "Nhà cửa và đời sống khác", "Nội thất không gian, tổng hợp"],
+        "default_l2": "Nhà cửa và đời sống khác"
+    },
+    "Rau, củ, trái cây": {
+        "available_l2": ["Củ, quả các loại", "Rau lá", "Rau, củ, trái cây khác", "Trái cây"],
+        "default_l2": "Rau, củ, trái cây khác"
+    },
+    "Sữa và sản phẩm từ sữa": {
+        "available_l2": ["Bơ sữa, phô mai", "Sữa bột", "Sữa chua, váng sữa", "Sữa đặc", "Sữa hạt", "Sữa tươi", "Sữa và sản phẩm từ sữa khác"],
+        "default_l2": "Sữa và sản phẩm từ sữa khác"
+    },
+    "Thịt, cá, trứng, hải sản": {
+        "available_l2": ["Cá, thủy hải sản", "Thịt", "Thực phẩm chín, qua chế biến", "Trứng", "Thịt, cá, trứng, hải sản khác"],
+        "default_l2": "Thịt, cá, trứng, hải sản khác"
+    },
+    "Đồ Uống - Giải Khát": {
+        "available_l2": ["Bia, rượu, đồ uống có cồn", "Đồ Uống - Giải Khát khác", "Nước ngọt", "Nước suối, nước tinh khiết", "Nước tăng lực, bù khoáng", "Thức uống dinh dưỡng", "Trà, cà phê"],
+        "default_l2": "Đồ Uống - Giải Khát khác"
+    },
+    "Không xác định": {
+        "available_l2": ["Không xác định"],
+        "default_l2": "Không xác định"
+    }
+}
