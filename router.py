@@ -6,10 +6,12 @@ from pydantic import BaseModel
 from main.classifier.industry_classifier import IndustryClassifier
 from main.classifier.FMCG_classifier import FMCGClassifier
 from main.classifier.FMCG_l1_classifier import FMCGl1Classifier
+from main.classifier.FMCG_l2_classifier import FMCGl2Classifier
 import time
 
 logging.basicConfig(
     level=logging.INFO,
+    # level=logging.WARNING,
     format='%(asctime)s - %(name)s - {%(pathname)s:%(lineno)d} - %(levelname)s - %(message)s',
     handlers=[
         logging.StreamHandler(sys.stdout)
@@ -26,7 +28,22 @@ FMCG_l1_classifier = FMCGl1Classifier(
     batch_size=128,
     default_class='Không xác định'
     )
+FMCG_l2_classifier = FMCGl2Classifier(
+    l2_model_path='model/industry_cls_l2.pt', 
+    l1_model_path='model/industry_cls_l1.pt',
+    l2_rule_json_path='main/rule/data-bin/keyword_lv2.json',
+    l1_rule_json_path='main/rule/data-bin/keyword_lv1.json',
+    l2_category_json_path='main/rule/data-bin/self_category_lv2.json',
+    l1_category_json_path='main/rule/data-bin/self_category_lv1.json',
+    l1l2_mapping_json_path='main/rule/data-bin/l1l2_mapping.json',
+    batch_size=128,
+    default_class='Không xác định'
+    )
 
+class Level2Body(BaseModel):
+    product_name: Union[str, list]
+    self_category: Union[str, list] = None
+    model_threshold: int = 0.9
 class Level1Body(BaseModel):
     product_name: Union[str, list]
     self_category: Union[str, list] = None
@@ -75,6 +92,57 @@ def fmcg_l1_cls(body_params: Level1Body):
                 "product_name": product_name,
                 "self_category": self_category,
                 "level1": level1,
+                "method": method
+            },
+            "status": "success",
+            "status_code": 200,
+            "message": "done"
+        }
+        product_name_for_logging = ", ".join(product_name[:10])
+        product_name_for_logging += ", ..." if len(product_name) > 10 else ""
+        logging.info(f"Prediction for [{product_name_for_logging}] took {(time.time() - start):.4f} seconds.")
+
+        return ret
+    except Exception as e:
+        logging.error(e)
+        return {
+            "data": (product_name, self_category),
+            "status": "error",
+            "status_code": 500,
+            "message": f"Exception in : {e}"
+        }
+
+
+@app.post("/pd-industry-classification/fmcg_l2_cls/")
+def fmcg_l1_cls(body_params: Level2Body):
+    product_name = body_params.product_name
+    self_category = body_params.self_category
+    if type(product_name) == str:
+        product_name = [product_name]
+    if type(self_category) == str:
+        self_category = [self_category]
+
+    # ensure that product_name and self_category have the same length
+    if self_category is not None and len(product_name) != len(self_category):
+        return {
+            "data": (product_name, self_category),
+            "status": "error",
+            "status_code": 500,
+            "message": f"Length of product_name and self_category must be the same"
+        }
+    
+    try:
+        start = time.time()
+        if not self_category:
+            self_category = ['' for _ in range(len(product_name))]
+        level2, method = FMCG_l2_classifier.predict(name_input=product_name,
+                                            self_category_input=self_category,
+                                            model_threshold=body_params.model_threshold)
+        ret = {
+            "data": {
+                "product_name": product_name,
+                "self_category": self_category,
+                "level2": level2,
                 "method": method
             },
             "status": "success",
