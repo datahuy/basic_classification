@@ -119,7 +119,7 @@ class FMCGl2Classifier():
         for i, pred in enumerate(rule_preds):
             if pred == 'Sữa và sản phẩm từ sữa khác':
                 rule_preds[i] = self._process_unknown_milk_product(name_input[i])
-                pred_method[i] = 'regex'
+                pred_method[i] = 'rule'
         logging.info(f"rule_preds after regex: {rule_preds}")
 
         # run model classifier on name_input
