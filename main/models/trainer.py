@@ -9,7 +9,7 @@ import torch.nn.functional as F
 from tqdm import tqdm
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 
-import utils
+from main.utils.logger import set_logger
 
 
 
@@ -37,7 +37,7 @@ class ClassifierTrainer():
         )
         self.loss_function = nn.CrossEntropyLoss()
 
-        utils.set_logger(log_path=os.path.join(self.checkpoint_dir, "train.log"))
+        set_logger(log_path=os.path.join(self.checkpoint_dir, "train.log"))
         logging.info("Started training {} epoch(s)".format(self.num_epochs))
 
         best_val_acc = 0.0
