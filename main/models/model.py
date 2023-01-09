@@ -1,8 +1,10 @@
 import math
+from typing import List
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
-from typing import List
+from tqdm import trange
 
 
 class Encoder(nn.Module):
@@ -58,7 +60,7 @@ class ClassfierModel():
         self.encoder = Encoder(
             config
         )
-
+    
     def preprocess(self, input):
         tokens = list(map(lambda x: [self.vocab_dict[w] if w in self.vocab_dict else self.vocab_dict['UNK'] for w in
                                      x.split(' ')], input))
@@ -69,12 +71,14 @@ class ClassfierModel():
         return text_embeddings
 
     def predict(self, input: List, batch_size):
+        self.encoder.eval()
         text_embeddings = self.preprocess(input)
         probs = []
         preds = []
         with torch.no_grad():
-            for i in range(0, len(input), batch_size):
-                outputs = self.encoder(text_embeddings[i:i + batch_size])
+            pbar = trange(0, len(input), batch_size, desc="Inferring", colour="cyan")
+            for i in pbar:
+                outputs = self.encoder(text_embeddings[i:i+batch_size])
                 outputs = torch.softmax(outputs, dim=-1)
                 cur_probs, cur_preds = torch.max(outputs, dim=-1)
                 preds.extend([self.index2label[p] for p in cur_preds.tolist()])
