@@ -1,95 +1,43 @@
-# Industry Product Classification - Data Department - Citigo
+# Product Classification - Data Department - Citigo
 
-_Authors: Ngo Phuong Nhi, Le Duc Bao, Nguyen Dinh Nghi, Pham Van Hung, To Duc Anh_
+_Authors: Le Duc Bao, Ngo Phuong Nhi, Dang Huu Tien, Pham Van Hung, To Duc Anh_
+The classification model is originally created by Nguyen Dinh Nghi
 
-Note : all scripts must be run in `pd-industry-classification`.
+## Description
+Code for classifying products into categories of industry level, level `n` of each industry.
 
-## Requirements
-
-We recommend using python3 and a virtual env. See instructions [here](https://docs.python.org/3/library/venv.html).
-
-### Linux
+## How to install and run the project
 ```
-python3 -m venv .env
-source env/bin/activate
-(.env) pip install --upgrade pip
-(.env) pip install -r requirements.txt
-
+pip install -r requirements.txt
+bash run.sh
 ```
-### Windows
 ```
-py -m venv .env
-.\env\Scripts\activate
-(.env) pip install --upgrade pip
-(.env) pip install -r requirements.txt
+curl --location --request POST 'https://datadepartment.citigo.net/pd-industry-classification/industry_cls/' \
+--header 'Content-Type: application/json' \
+--data-raw '{"product_name": ["sữa đặc", "sữa chua vinamilk không đường", "sữa rửa mặt nivea"], "threshold_KP": 0.5, "threshold_FMCG": 0.5}'
 ```
 
-When you're done working on the project, deactivate the virtual environment with `deactivate`.
-
-## Task
-
-Given a product name, give industry name respectively ([Document Classification](https://en.wikipedia.org/wiki/Document_classification))
-
-```
->> infer(["Iphone 14 promax"])
-['Điện tử - Điện máy']
-```
-
-We provide a demo subset of the csv dataset (100 sentences) for testing in `data/demo_data` and we can go to next steps to **Quickstart**
-
-## [optional] Download the csv dataset (~5 min)
-
-1. **Download the dataset** `.csv` file  on [Google Cloud Storage](https://console.cloud.google.com/storage/browser/bi_recommendation_hub_storage/product_discovery/valitdated_kiotviet?authuser=1) and save it under the `data/kiot-viet` directory. Make sure you file data containing columns: `sentences` and `labels`
+## How to train the classification model
+1. Dataset has to be in `.csv` file with two columns, one for product name (`sentences`) and one for label (`labels`)
 
 2. **Build the dataset** Run the following script
+```
+python build_data.py --data_dir DATA_DIR --data_name FILE.CSV
 
 ```
-python build_data.py --data_dir data/data_demo --data_name product.csv
 
-```
+It will extract the sentences and labels from the dataset, split it into train/val/test set.
 
-It will extract the sentences and labels from the dataset, split it into train/val/test and save it in a convenient format for our model.
-
-3. **Build** vocabularies and parameters for your dataset by running
-
+3. **Build vocabularies** by running
 ```
 python build_vocab.py --data_dir data/data_demo --min_count_word 1
 ```
 
 It will write vocabulary files `words.txt` and `labels.txt` containing the words and labels in the dataset. It will also save a `dataset_params.json` with some extra information.
 
-2. **Your first experiment** We created a `base_model` directory for you under the `experiments` directory. It contains a file `params.json` which sets the hyperparameters for the experiment. It looks like
+4. Edit model and training config in `data/config.yaml`
 
-```yaml
-model_config:
-  hidden_size: 200
-  dropout: 0.3
-
-training_config:
-  checkpoint_dir: 'experiments/'
-  learning_rate: 0.001
-  num_epochs: 10
-  train_batch_size: 128
-  eval_batch_size: 128
-  gpu: -1
-  logging_steps: 100
-  eval_steps: 1000
-  save_steps: 3000
-  save_best: True
+5. **Train** your experiment. Simply run
 ```
-
-For every new experiment, you will need to create a new directory under `experiments` with a `params.json` file.
-
-3. **Train** your experiment. Simply run
-
+python train.py --data_dir DATA_DIR --config_path data/config.yaml --category CATEGORY
 ```
-python train.py --data_dir data/data_demo --config_path data/config.yaml
-```
-
-It will instantiate a model and train it on the training set following the hyperparameters specified in `config.yaml`. It will also evaluate some metrics on the development set.
-
-## Resources
-
-- [PyTorch documentation](http://pytorch.org/docs/1.2.0/)
-- [Tutorials](http://pytorch.org/tutorials/)
-- [PyTorch warm-up](https://github.com/jcjohnson/pytorch-examples)
