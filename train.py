@@ -8,7 +8,7 @@ import os
 import yaml
 import torch
 
-import main.utils.logger import set_logger
+from main.utils.logger import set_logger
 
 def collate_fn(data):
     text, label = zip(*data)
