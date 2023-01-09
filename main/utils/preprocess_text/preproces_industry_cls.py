@@ -73,7 +73,7 @@ def truncate_unknown(text: str) -> str:
     return text
 
 
-with open('data/stop_words.txt', 'r') as fi:
+with open('data/stop_words.txt', 'rb') as fi:
     stop_words = fi.readlines() 
     stop_words = [word.rstrip() for word in stop_words]
 

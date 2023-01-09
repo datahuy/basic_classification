@@ -12,12 +12,13 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 import utils
 
 
+
 class ClassifierTrainer():
-    def __init__(self, 
-                model,
-                train_dataloader,
-                eval_dataloader,
-                training_config):
+    def __init__(self,
+                 model,
+                 train_dataloader,
+                 eval_dataloader,
+                 training_config):
         self.__dict__.update(training_config)
         self.model = model
         self.train_dataloader = train_dataloader
@@ -54,11 +55,11 @@ class ClassifierTrainer():
 
                     outputs = self.encoder(text_embeddings.to(self.device))
                     loss = self.loss_function(outputs, labels.to(self.device))
-                
+
                     # Compute gradients of loss function with all variables
                     loss.backward()
                     torch.nn.utils.clip_grad_norm_(self.encoder.parameters(), .5)
-                
+
                     # Performs updates using calculated gradients
                     self.optimizer.step()
 
