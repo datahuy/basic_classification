@@ -1,9 +1,8 @@
 __pycache__/
 *.py[cod]
 
-test.ipynb
 test_infer.py
-test.py
+test.*
 log
 test/
 

@@ -114,7 +114,7 @@ def fmcg_l1_cls(body_params: Level1Body):
 
 
 @app.post("/pd-industry-classification/fmcg_l2_cls/")
-def fmcg_l1_cls(body_params: Level2Body):
+def fmcg_l2_cls(body_params: Level2Body):
     product_name = body_params.product_name
     self_category = body_params.self_category
     if type(product_name) == str:
