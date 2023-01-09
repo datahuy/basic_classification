@@ -8,7 +8,7 @@ import os
 import yaml
 import torch
 
-import utils
+import main.utils.logger import set_logger
 
 def collate_fn(data):
     text, label = zip(*data)
@@ -86,7 +86,7 @@ if __name__ == "__main__":
 
     # Set the logger
     log_path = os.path.join(checkpoint_dir, "train.log")
-    utils.set_logger(log_path=log_path)
+    set_logger(log_path=log_path)
 
     # Create the input data pipeline
     logging.info("Loading the datasets...")
