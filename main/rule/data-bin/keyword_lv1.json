@@ -128,7 +128,15 @@
         "bánh tráng",
         "nho khô",
         "cháy tỏi",
-        "sấy giòn"
+        "sấy giòn",
+        "kem ốc",
+        "kem đậu",
+        "chuối sấy",
+        "mít sấy",
+        "khoai lang sấy",
+        "dâu sấy",
+        "khoai môn sấy",
+        "khoai sấy"
     ],
     "Chăm sóc cá nhân - Personal Care": [
         "acne",
@@ -1695,6 +1703,7 @@
         "xương ống",
         "xxich",
         "thực phẩm đông lạnh",
-        "thịt tươi"
+        "thịt tươi",
+        "ruốc"
     ]
 }

@@ -126,7 +126,9 @@
         "kem dâu",
         "kem que",
         "kem sữa",
-        "merino"
+        "merino",
+        "kem ốc",
+        "kem đậu"
     ],
     "Socola và sản phẩm từ socola": [
         "chocolate",
@@ -139,7 +141,13 @@
     ],
     "Trái cây sấy, hạt khô": [
         "hạt dẻ",
-        "nho khô"
+        "nho khô",
+        "chuối sấy",
+        "mít sấy",
+        "khoai lang sấy",
+        "dâu sấy",
+        "khoai môn sấy",
+        "khoai sấy"
     ],
     "Mứt, thạch": [
         "mứt",
@@ -1806,7 +1814,8 @@
         "xá xíu",
         "xx",
         "xúc xích",
-        "xxich"
+        "xxich",
+        "ruốc"
     ],
     "Trứng": [
         "lòng đỏ",
