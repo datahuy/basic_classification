@@ -21,8 +21,7 @@
         "sữa rửa mặt"
     ],
     "Chăm sóc cơ thể": [
-        "sữa tắm",
-        "bỉm"
+        "sữa tắm"
     ],
     "Thực phẩm chức năng": [
         "thực phẩm chức năng",
@@ -34,6 +33,15 @@
     ],
     "Chăm sóc phụ nữ": [
         "băng vệ sinh"
+    ],
+    "Không xác định": [
+        "bỉm",
+        "quần áo",
+        "đồ sơ sinh",
+        "thời trang",
+        "áo",
+        "giày",
+        "đầm"
     ],
     "Muối, tiêu, hạt nêm, bột ngọt": [
         "gia vị"
@@ -68,15 +76,9 @@
         "đồ chơi",
         "văn phòng phẩm",
         "thuốc lá",
-        "quần áo",
         "vpp",
         "đồ chơi trẻ em",
-        "thuốc",
-        "đồ sơ sinh",
-        "thời trang",
-        "áo",
-        "giày",
-        "đầm"
+        "thuốc"
     ],
     "Trái cây": [
         "trái cây"

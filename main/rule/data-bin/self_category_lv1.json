@@ -1,19 +1,13 @@
 {
     "Bánh, kẹo, snack": [
-        "bánh kẹo",
         "bánh",
         "ăn vặt",
         "kẹo",
-        "kẹo bánh",
         "đồ ăn vặt",
         "kem",
-        "bim bim",
-        "banh keo"
+        "bim bim"
     ],
     "Chăm sóc cá nhân - Personal Care": [
-        "mỹ phẩm",
-        "hóa mỹ phẩm",
-        "hoá mỹ phẩm",
         "dầu gội",
         "dầu xả",
         "sữa rửa mặt",
@@ -22,21 +16,27 @@
         "tpcn",
         "kem đánh răng",
         "băng vệ sinh",
-        "bỉm",
-        "đồ dùng cá nhân",
-        "chăm sóc cá nhân",
         "bàn chải"
     ],
-    "Chăm sóc thú cưng": [
+    "Không xác định": [
+        "bỉm",
+        "quần áo",
+        "đồ sơ sinh",
+        "thời trang",
+        "áo",
+        "giày",
+        "đầm"
     ],
     "Dầu ăn, nước chấm, gia vị": [
         "gia vị",
         "dầu ăn"
     ],
-    "Giặt giũ và chăm sóc nhà cửa": [
+    "Nhà cửa và đời sống": [
         "gia dụng",
         "đồ gia dụng",
-        "hàng gia dụng",
+        "hàng gia dụng"
+    ],
+    "Giặt giũ và chăm sóc nhà cửa": [
         "nước giặt",
         "nước rửa bát",
         "nước rửa chén",
@@ -54,18 +54,9 @@
         "đồ chơi",
         "văn phòng phẩm",
         "thuốc lá",
-        "quần áo",
         "vpp",
         "đồ chơi trẻ em",
-        "thuốc",
-        "đồ sơ sinh",
-        "thời trang",
-        "áo",
-        "giày",
-        "đầm"
-    ],
-    "Nhà cửa và đời sống": [
-        "đồ nhựa"
+        "thuốc"
     ],
     "Rau, củ, trái cây": [
         "trái cây"
@@ -78,16 +69,10 @@
         "sữa bột",
         "sữa nước"
     ],
-    "Thịt, cá, trứng, hải sản": [
-        "đồ đông lạnh",
-        "đông lạnh"
-    ],
     "Đồ Uống - Giải Khát": [
         "nước ngọt",
-        "đồ uống",
         "nước giải khát",
         "bia",
-        "đồ uống có cồn",
-        "nước uống"
-   ]
+        "đồ uống có cồn"
+    ]
 }
