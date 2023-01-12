@@ -47,7 +47,7 @@ class Level2Body(BaseModel):
 class Level1Body(BaseModel):
     product_name: Union[str, list]
     self_category: Union[str, list] = None
-    model_threshold: int = 0.9
+    model_threshold: int = 0.99
 
 class Level0Body(BaseModel):
     product_name: Union[str, list]
