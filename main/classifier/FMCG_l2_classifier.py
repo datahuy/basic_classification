@@ -6,16 +6,6 @@ import logging
 import sys 
 from typing import List, Tuple
 
-logging.basicConfig(
-    # level=logging.WARNING,
-    level=logging.INFO,
-    format='%(asctime)s - %(name)s - {%(pathname)s:%(lineno)d} - %(levelname)s - %(message)s',
-    handlers=[
-        logging.StreamHandler(sys.stdout)
-    ]
-)
-
-
 class FMCGl2ModelClassifier(BaseClassifier):
     def __init__(self, model_path, batch_size=128, default_class='Không xác định'):
         name = 'FMCG l2 Classifier'
