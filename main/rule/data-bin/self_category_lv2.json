@@ -34,9 +34,12 @@
     "Chăm sóc phụ nữ": [
         "băng vệ sinh"
     ],
-    "Không xác định": [
+    "Non FMCG": [
         "bỉm",
+        "đồ chơi",
         "quần áo",
+        "đồ chơi trẻ em",
+        "thuốc",
         "đồ sơ sinh",
         "thời trang",
         "áo",
@@ -72,18 +75,17 @@
         "đồ khô",
         "thực phẩm khô"
     ],
-    "Khác": [
-        "đồ chơi",
+    "Nhà cửa và đời sống khác": [
         "văn phòng phẩm",
-        "thuốc lá",
-        "vpp",
-        "đồ chơi trẻ em",
-        "thuốc"
+        "vpp"
+    ],
+    "Thuốc lá/ Xì gà": [
+        "thuốc lá"
     ],
     "Trái cây": [
         "trái cây"
     ],
-    "[to be processed]": [
+    "Sữa và sản phẩm từ sữa khác": [
         "sữa"
     ],
     "Sữa tươi": [

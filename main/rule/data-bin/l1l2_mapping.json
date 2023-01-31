@@ -1,26 +1,26 @@
 {
     "Bánh, kẹo, snack": {
-        "available_l2": ["Bánh, kẹo, snack khác", "Bánh quy, bánh xốp, bánh mềm", "Bánh tươi", "Kem", "Kẹo", "Mứt, thạch", "Ngũ cốc", "Snack, đồ ăn vặt", "Socola và sản phẩm từ socola", "Trái cây sấy, hạt khô"],
+        "available_l2": ["Bánh tươi", "Bánh quy, bánh xốp, bánh mềm", "Kẹo", "Mứt, thạch", "Snack, đồ ăn vặt", "Socola và sản phẩm từ socola", "Trái cây sấy, hạt khô", "Bánh, kẹo, snack khác"],
         "default_l2": "Bánh, kẹo, snack khác"
     },
     "Chăm sóc cá nhân - Personal Care": {
-        "available_l2": ["Chăm sóc cá nhân khác", "Chăm sóc cơ thể", "Chăm sóc da mặt", "Chăm sóc phụ nữ", "Chăm sóc răng miệng", "Chăm sóc tóc", "Dụng cụ và phụ kiện", "Thực phẩm chức năng", "Y tế"],
+        "available_l2": ["Chăm sóc cơ thể", "Chăm sóc da mặt", "Chăm sóc phụ nữ", "Chăm sóc răng miệng", "Chăm sóc tóc", "Dụng cụ và phụ kiện", "Thực phẩm chức năng", "Y tế", "Chăm sóc cá nhân khác"],
         "default_l2": "Chăm sóc cá nhân - Personal Care khác"
     },
     "Chăm sóc thú cưng": {
-        "available_l2": ["Phụ kiện cho thú cưng", "Thức ăn thú cưng", "Vệ sinh thú cưng"],
+        "available_l2": ["Thức ăn thú cưng", "Vệ sinh thú cưng", "Phụ kiện cho thú cưng", "Chăm sóc thú cưng khác"],
         "default_l2": "Chăm sóc thú cưng khác"
     },
     "Dầu ăn, nước chấm, gia vị": {
-        "available_l2": ["Dầu ăn", "Dầu hào, giấm", "Đường", "Gia vị khác", "Muối, tiêu, hạt nêm, bột ngọt", "Nước mắm - Nước chấm", "Tương, sốt", "Nước cốt lẩu"],
+        "available_l2": ["Dầu ăn", "Dầu hào, giấm", "Đường", "Gia vị khác", "Muối, tiêu, hạt nêm, bột ngọt", "Nước cốt lẩu", "Nước mắm - Nước chấm", "Tương, sốt"],
         "default_l2": "Dầu ăn, nước chấm, gia vị khác"
     },
     "Giặt giũ và chăm sóc nhà cửa": {
-        "available_l2": ["Giặt giũ và chăm sóc nhà cửa khác", "Bao bì, túi đựng rác", "Dụng cụ vệ sinh", "Giặt xả", "Giấy vệ sinh, khăn giấy", "Vệ sinh nhà cửa"],
+        "available_l2": ["Bao bì, túi đựng rác", "Dụng cụ vệ sinh", "Giặt xả", "Giấy vệ sinh, khăn giấy", "Vệ sinh nhà cửa", "Giặt giũ và chăm sóc nhà cửa khác"],
         "default_l2": "Giặt giũ và chăm sóc nhà cửa khác"
     },
     "Gạo, bột và thực phẩm khô": {
-        "available_l2": ["Bột các loại", "Đồ hộp", "Gạo, bột và thực phẩm khô khác", "Gạo, nếp", "Thực phẩm ăn liền", "Thực phẩm khô"],
+        "available_l2": ["Bột các loại", "Đồ hộp", "Gạo, nếp", "Ngũ cốc", "Thực phẩm ăn liền", "Thực phẩm khô", "Gạo, bột và thực phẩm khô khác"],
         "default_l2": "Gạo, bột và thực phẩm khô khác"
     },
     "Khác": {
@@ -28,11 +28,11 @@
         "default_l2": "Khác"
     },
     "Nhà cửa và đời sống": {
-        "available_l2": ["Chăn, ga, gối, nệm", "Đồ dùng nhà bếp", "Đồ dùng phòng tắm", "Đồ thờ cúng", "Dụng cụ và thiết bị tiện ích", "Ngoại thất, sân vườn", "Nhà cửa và đời sống khác", "Nội thất không gian, tổng hợp"],
+        "available_l2": ["Chăn, ga, gối, nệm", "Đồ dùng nhà bếp", "Đồ dùng phòng tắm", "Đồ thờ cúng", "Dụng cụ và thiết bị tiện ích", "Ngoại thất, sân vườn", "Nội thất không gian, tổng hợp", "Nhà cửa và đời sống khác"],
         "default_l2": "Nhà cửa và đời sống khác"
     },
     "Rau, củ, trái cây": {
-        "available_l2": ["Củ, quả các loại", "Rau lá", "Rau, củ, trái cây khác", "Trái cây"],
+        "available_l2": ["Củ, quả các loại", "Rau lá", "Trái cây", "Rau, củ, trái cây khác"],
         "default_l2": "Rau, củ, trái cây khác"
     },
     "Sữa và sản phẩm từ sữa": {
@@ -40,15 +40,27 @@
         "default_l2": "Sữa và sản phẩm từ sữa khác"
     },
     "Thịt, cá, trứng, hải sản": {
-        "available_l2": ["Cá, thủy hải sản", "Thịt", "Thực phẩm chín, qua chế biến", "Trứng", "Thịt, cá, trứng, hải sản khác"],
+        "available_l2": ["Cá, thủy hải sản", "Thịt", "Trứng", "Thịt, cá, trứng, hải sản khác"],
         "default_l2": "Thịt, cá, trứng, hải sản khác"
     },
     "Đồ Uống - Giải Khát": {
-        "available_l2": ["Bia, rượu, đồ uống có cồn", "Đồ Uống - Giải Khát khác", "Nước ngọt", "Nước suối, nước tinh khiết", "Nước tăng lực, bù khoáng", "Thức uống dinh dưỡng", "Trà, cà phê"],
-        "default_l2": "Đồ Uống - Giải Khát khác"
+        "available_l2": ["Bia, rượu, đồ uống có cồn", "Nước ngọt", "Nước suối, nước tinh khiết", "Nước tăng lực, bù khoáng", "Nước trái cây", "Thức uống dinh dưỡng", "Trà, cà phê", "Đồ uống khác"],
+        "default_l2": "Đồ uống khác"
     },
     "Không xác định": {
         "available_l2": ["Không xác định"],
         "default_l2": "Không xác định"
+    },
+    "Thực phẩm đông mát": {
+        "available_l2": ["Bánh đông mát", "Đậu hũ", "Kem", "Cá, thủy hải sản đông mát", "Thịt đông mát", "Thực phẩm đông mát khác", "Thực phẩm chín, qua chế biến"],
+        "default_l2": "Thực phẩm đông mát khác"
+    },
+    "Non FMCG": {
+        "available_l2": ["Non FMCG"],
+        "default_l2": "Non FMCG"
+    },
+    "Thuốc lá/ Xì gà": {
+        "available_l2": ["Thuốc lá/ Xì gà"],
+        "default_l2": "Thuốc lá/ Xì gà"
     }
 }
