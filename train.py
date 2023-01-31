@@ -113,5 +113,5 @@ if __name__ == "__main__":
 
     main()
 
-    os.makedirs(output_dir, exist_ok=True)
-    main()
+    # os.makedirs(output_dir, exist_ok=True)
+    # main()

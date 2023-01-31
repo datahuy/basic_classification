@@ -4,8 +4,10 @@
         "ăn vặt",
         "kẹo",
         "đồ ăn vặt",
-        "kem",
         "bim bim"
+    ],
+    "Thực phẩm đông mát": [
+        "kem"
     ],
     "Chăm sóc cá nhân - Personal Care": [
         "dầu gội",
@@ -18,9 +20,12 @@
         "băng vệ sinh",
         "bàn chải"
     ],
-    "Không xác định": [
+    "Non FMCG": [
         "bỉm",
+        "đồ chơi",
         "quần áo",
+        "đồ chơi trẻ em",
+        "thuốc",
         "đồ sơ sinh",
         "thời trang",
         "áo",
@@ -34,7 +39,9 @@
     "Nhà cửa và đời sống": [
         "gia dụng",
         "đồ gia dụng",
-        "hàng gia dụng"
+        "hàng gia dụng",
+        "văn phòng phẩm",
+        "vpp"
     ],
     "Giặt giũ và chăm sóc nhà cửa": [
         "nước giặt",
@@ -50,13 +57,8 @@
         "thực phẩm khô",
         "mỳ tôm"
     ],
-    "Khác": [
-        "đồ chơi",
-        "văn phòng phẩm",
-        "thuốc lá",
-        "vpp",
-        "đồ chơi trẻ em",
-        "thuốc"
+    "Thuốc lá/ Xì gà": [
+        "thuốc lá"
     ],
     "Rau, củ, trái cây": [
         "trái cây"
