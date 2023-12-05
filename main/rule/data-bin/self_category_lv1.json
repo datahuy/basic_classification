@@ -1,0 +1,80 @@
+{
+    "Bánh, kẹo, snack": [
+        "bánh",
+        "ăn vặt",
+        "kẹo",
+        "đồ ăn vặt",
+        "bim bim"
+    ],
+    "Thực phẩm đông mát": [
+        "kem"
+    ],
+    "Chăm sóc cá nhân - Personal Care": [
+        "dầu gội",
+        "dầu xả",
+        "sữa rửa mặt",
+        "sữa tắm",
+        "thực phẩm chức năng",
+        "tpcn",
+        "kem đánh răng",
+        "băng vệ sinh",
+        "bàn chải"
+    ],
+    "Non FMCG": [
+        "bỉm",
+        "đồ chơi",
+        "quần áo",
+        "đồ chơi trẻ em",
+        "thuốc",
+        "đồ sơ sinh",
+        "thời trang",
+        "áo",
+        "giày",
+        "đầm"
+    ],
+    "Dầu ăn, nước chấm, gia vị": [
+        "gia vị",
+        "dầu ăn"
+    ],
+    "Nhà cửa và đời sống": [
+        "gia dụng",
+        "đồ gia dụng",
+        "hàng gia dụng",
+        "văn phòng phẩm",
+        "vpp"
+    ],
+    "Giặt giũ và chăm sóc nhà cửa": [
+        "nước giặt",
+        "nước rửa bát",
+        "nước rửa chén",
+        "bột giặt"
+    ],
+    "Gạo, bột và thực phẩm khô": [
+        "thực phẩm ăn liền",
+        "đồ khô",
+        "mì tôm",
+        "mì",
+        "thực phẩm khô",
+        "mỳ tôm"
+    ],
+    "Thuốc lá/ Xì gà": [
+        "thuốc lá"
+    ],
+    "Rau, củ, trái cây": [
+        "trái cây"
+    ],
+    "Sữa và sản phẩm từ sữa": [
+        "sữa",
+        "sữa tươi",
+        "sữa chua",
+        "sữa đặc",
+        "sữa bột",
+        "sữa nước"
+    ],
+    "Đồ Uống - Giải Khát": [
+        "nước ngọt",
+        "nước giải khát",
+        "bia",
+        "đồ uống có cồn"
+    ]
+}

@@ -1,0 +1,9 @@
+version: '3'
+services:
+  product_classification:
+    build: .
+    volumes:
+    - .:/app/
+    ports:
+    - 9201:9201
+    
